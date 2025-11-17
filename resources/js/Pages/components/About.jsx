@@ -164,42 +164,66 @@ export default function About() {
                     </div>
                 </div>
 
-                {/* Vision & Mission - Card Style */}
-                <div className="grid lg:grid-cols-2 gap-8 mb-32">
-                    <div className="relative group bg-gradient-to-br from-slate-900/90 to-slate-900/50 backdrop-blur-sm border border-slate-800/50 rounded-2xl p-10 hover:border-red-500/40 transition-all duration-500 overflow-hidden">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full filter blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-
-                        <div className="relative space-y-6">
-                            <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 bg-gradient-to-br from-red-600 to-red-500 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                    </svg>
-                                </div>
-                                <h3 className="text-3xl font-bold text-white">Our Vision</h3>
-                            </div>
-                            <p className="text-slate-300 text-lg leading-relaxed">
-                                To become the world's most innovative digital art studio, where creativity knows no bounds and every project pushes the boundaries of visual storytelling. We envision a future where our art inspires millions and transforms how people experience digital content.
-                            </p>
-                        </div>
+                {/* Best Works Gallery */}
+                <div className="mb-32">
+                    <div className="text-center mb-16">
+                        <h3 className="text-4xl lg:text-5xl font-bold text-white mb-4">Featured Works</h3>
+                        <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+                            A glimpse into our finest creations
+                        </p>
                     </div>
 
-                    <div className="relative group bg-gradient-to-br from-slate-900/90 to-slate-900/50 backdrop-blur-sm border border-slate-800/50 rounded-2xl p-10 hover:border-red-500/40 transition-all duration-500 overflow-hidden">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full filter blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+                    <div className="grid lg:grid-cols-2 gap-8">
+                        {/* Work 1 */}
+                        <div className="relative group bg-slate-900/40 backdrop-blur-sm border border-slate-800/50 rounded-2xl overflow-hidden hover:border-red-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/20">
+                            <div className="aspect-[4/3] relative overflow-hidden">
+                                <img
+                                    src="/images/work1.jpg"
+                                    alt="Featured Work 1"
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    onError={(e) => {
+                                        e.target.src = 'https://placehold.co/800x600/0f172a/ef4444?text=Featured+Work+1';
+                                    }}
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
 
-                        <div className="relative space-y-6">
-                            <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 bg-gradient-to-br from-red-600 to-red-500 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                                {/* Overlay Info */}
+                                <div className="absolute inset-0 flex flex-col justify-end p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                        <span className="inline-block px-4 py-1 bg-red-500 text-white text-sm font-semibold rounded-full mb-3">
+                                            Best Work
+                                        </span>
+                                        <h4 className="text-2xl font-bold text-white mb-2">Professional Illustration</h4>
+                                        <p className="text-slate-300 text-sm">High-quality digital artwork</p>
+                                    </div>
                                 </div>
-                                <h3 className="text-3xl font-bold text-white">Our Mission</h3>
                             </div>
-                            <p className="text-slate-300 text-lg leading-relaxed">
-                                To deliver exceptional artistic experiences that exceed client expectations through cutting-edge techniques, passionate creativity, and unwavering commitment to quality. We strive to make every project a masterpiece that tells a unique story.
-                            </p>
+                        </div>
+
+                        {/* Work 2 */}
+                        <div className="relative group bg-slate-900/40 backdrop-blur-sm border border-slate-800/50 rounded-2xl overflow-hidden hover:border-red-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/20">
+                            <div className="aspect-[4/3] relative overflow-hidden">
+                                <img
+                                    src="/images/work2.jpg"
+                                    alt="Featured Work 2"
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    onError={(e) => {
+                                        e.target.src = 'https://placehold.co/800x600/0f172a/ef4444?text=Featured+Work+2';
+                                    }}
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+
+                                {/* Overlay Info */}
+                                <div className="absolute inset-0 flex flex-col justify-end p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                        <span className="inline-block px-4 py-1 bg-red-500 text-white text-sm font-semibold rounded-full mb-3">
+                                            Best Work
+                                        </span>
+                                        <h4 className="text-2xl font-bold text-white mb-2">Creative Design</h4>
+                                        <p className="text-slate-300 text-sm">Stunning visual storytelling</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
