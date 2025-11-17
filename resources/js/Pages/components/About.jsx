@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function About() {
     const [isVisible, setIsVisible] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -22,6 +23,25 @@ export default function About() {
             if (element) observer.unobserve(element);
         };
     }, []);
+
+    // Keyboard support for lightbox
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape' && selectedImage) {
+                setSelectedImage(null);
+            }
+        };
+
+        if (selectedImage) {
+            window.addEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = 'hidden'; // Prevent background scroll
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = 'unset';
+        };
+    }, [selectedImage]);
 
     const stats = [
         { number: '500+', label: 'Projects Completed' },
@@ -123,7 +143,7 @@ export default function About() {
                         <div className="space-y-6">
                             <div className="relative pl-6 border-l-4 border-red-500">
                                 <p className="text-2xl lg:text-3xl font-light text-white/90 leading-relaxed italic">
-                                    "Meet Afandy — Owner of FindDesign and Professional Illustrator who has been creating since 2015."
+                                    "Meet Afandy – Owner of FindDesign and Professional Illustrator who has been creating since 2015."
                                 </p>
                             </div>
 
@@ -132,7 +152,7 @@ export default function About() {
                                     Founded in 2015, <span className="text-red-400 font-semibold">FindDesign</span> What started as a simple pencil stroke has now brought to life 1000+ projects for clients worldwide.
                                 </p>
                                 <p className="text-lg text-slate-300 leading-relaxed">
-                                   With over 8 years of experience in the creative industry, I believe that every brand has a unique story worth telling through captivating visuals. At FindDesign, we don't just create designs — we craft visual experiences that speak directly to your audience's hearts.
+                                   With over 8 years of experience in the creative industry, I believe that every brand has a unique story worth telling through captivating visuals. At FindDesign, we don't just create designs – we craft visual experiences that speak directly to your audience's hearts.
                                 </p>
                             </div>
                         </div>
@@ -175,7 +195,10 @@ export default function About() {
 
                     <div className="grid lg:grid-cols-2 gap-8">
                         {/* Work 1 */}
-                        <div className="relative group bg-slate-900/40 backdrop-blur-sm border border-slate-800/50 rounded-2xl overflow-hidden hover:border-red-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/20">
+                        <div
+                            onClick={() => setSelectedImage({ src: '/images/work1.jpg', title: 'Professional Illustration', desc: 'High-quality digital artwork' })}
+                            className="relative group bg-slate-900/40 backdrop-blur-sm border border-slate-800/50 rounded-2xl overflow-hidden hover:border-red-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/20 cursor-pointer"
+                        >
                             <div className="aspect-[4/3] relative overflow-hidden">
                                 <img
                                     src="/images/work1.jpg"
@@ -195,13 +218,23 @@ export default function About() {
                                         </span>
                                         <h4 className="text-2xl font-bold text-white mb-2">Professional Illustration</h4>
                                         <p className="text-slate-300 text-sm">High-quality digital artwork</p>
+                                        <p className="text-red-400 text-xs mt-2 flex items-center gap-1">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            Click to view full size
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Work 2 */}
-                        <div className="relative group bg-slate-900/40 backdrop-blur-sm border border-slate-800/50 rounded-2xl overflow-hidden hover:border-red-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/20">
+                        <div
+                            onClick={() => setSelectedImage({ src: '/images/work2.jpg', title: 'Creative Design', desc: 'Stunning visual storytelling' })}
+                            className="relative group bg-slate-900/40 backdrop-blur-sm border border-slate-800/50 rounded-2xl overflow-hidden hover:border-red-500/40 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/20 cursor-pointer"
+                        >
                             <div className="aspect-[4/3] relative overflow-hidden">
                                 <img
                                     src="/images/work2.jpg"
@@ -221,12 +254,108 @@ export default function About() {
                                         </span>
                                         <h4 className="text-2xl font-bold text-white mb-2">Creative Design</h4>
                                         <p className="text-slate-300 text-sm">Stunning visual storytelling</p>
+                                        <p className="text-red-400 text-xs mt-2 flex items-center gap-1">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            Click to view full size
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Professional Image Modal/Lightbox */}
+                {selectedImage && (
+                    <div
+                        className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 lg:p-8 animate-fadeIn"
+                        onClick={() => setSelectedImage(null)}
+                    >
+                        {/* Header Controls */}
+                        <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 to-transparent p-4 sm:p-6 z-[10000]">
+                            <div className="flex items-center justify-between max-w-7xl mx-auto">
+                                {/* Image Counter */}
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg px-4 py-2">
+                                        <span className="text-white font-semibold text-sm">1 / 2</span>
+                                    </div>
+                                </div>
+
+                                {/* Close Button */}
+                                <button
+                                    className="w-10 h-10 sm:w-12 sm:h-12 bg-red-600 hover:bg-red-500 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:rotate-90"
+                                    onClick={() => setSelectedImage(null)}
+                                >
+                                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Main Image Container */}
+                        <div className="relative w-full max-w-7xl mx-auto" onClick={(e) => e.stopPropagation()}>
+                            {/* Image Wrapper with Loading State */}
+                            <div className="relative bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700/50">
+                                <img
+                                    src={selectedImage.src}
+                                    alt={selectedImage.title}
+                                    className="w-full h-auto max-h-[70vh] sm:max-h-[80vh] object-contain mx-auto"
+                                    onError={(e) => {
+                                        e.target.src = 'https://placehold.co/1920x1080/0f172a/ef4444?text=Image+Not+Found';
+                                    }}
+                                />
+                            </div>
+
+                            {/* Image Info Overlay */}
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-4 sm:p-6 lg:p-8 rounded-b-lg">
+                                <div className="max-w-4xl">
+                                    <div className="flex items-start justify-between gap-4 mb-3">
+                                        <div className="flex-1">
+                                            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2">{selectedImage.title}</h3>
+                                            <p className="text-slate-300 text-sm sm:text-base">{selectedImage.desc}</p>
+                                        </div>
+
+                                        {/* Download Button */}
+                                        <button className="flex-shrink-0 w-10 h-10 bg-slate-800/80 hover:bg-red-600 border border-slate-700/50 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110">
+                                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    {/* Tags */}
+                                    <div className="flex flex-wrap gap-2">
+                                        <span className="px-3 py-1 bg-red-500/20 border border-red-500/30 text-red-400 text-xs font-medium rounded-full">
+                                            Featured
+                                        </span>
+                                        <span className="px-3 py-1 bg-slate-800/80 border border-slate-700/50 text-slate-300 text-xs font-medium rounded-full">
+                                            Illustration
+                                        </span>
+                                        <span className="px-3 py-1 bg-slate-800/80 border border-slate-700/50 text-slate-300 text-xs font-medium rounded-full">
+                                            2024
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Bottom Instruction */}
+                        <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-[10000]">
+                            <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-full px-4 sm:px-6 py-2 sm:py-3">
+                                <p className="text-slate-400 text-xs sm:text-sm flex items-center gap-2">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                                    </svg>
+                                    Press <kbd className="px-2 py-0.5 bg-slate-800 rounded text-slate-300 text-xs font-mono mx-1">ESC</kbd> or click outside to close
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Core Values - Professional Grid */}
                 <div className="text-center mb-16">
