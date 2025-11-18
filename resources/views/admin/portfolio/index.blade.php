@@ -103,7 +103,7 @@
                                 required
                             >
                                 <option value="" disabled selected>Pilih Kategori</option>
-                                <option value="TATTO ILLUSTRATIONS" @if(old('category') == 'TATTO ILLUSTRATIONS') selected @endif>ILLUSTRATIONS</option>
+                                <option value="ILLUSTRATIONS" @if(old('category') == 'ILLUSTRATIONS') selected @endif>ILLUSTRATIONS</option>
                                 <option value="OTOMOTIF" @if(old('category') == 'OTOMOTIF') selected @endif>OTOMOTIF</option>
                                 <option value="BLUE COLLAR" @if(old('category') == 'BLUE COLLAR') selected @endif>BLUE COLLAR</option>
                             </select>

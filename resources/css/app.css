@@ -1,3 +1,53 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* PENTING: Resize gambar cursor Anda dari 4000x5000px menjadi 32x32px atau 48x48px terlebih dahulu! */
+/* Gambar terlalu besar akan membuat cursor lag dan tidak berfungsi dengan baik */
+
+/* Custom Cursor Global - Seluruh Halaman */
+* {
+    cursor: url('/images/cursor/cursor-custom.png') 16 16, auto !important;
+}
+
+/* Cursor untuk hover pada button, link, dan elemen interaktif */
+button,
+a,
+[role="button"],
+.clickable,
+[onclick],
+input[type="submit"],
+input[type="button"] {
+    cursor: url('/images/cursor/cursor-custom.png') 16 16, pointer !important;
+}
+
+/* Cursor untuk text input dan textarea */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea {
+    cursor: url('/images/cursor/cursor-custom.png') 16 16, text !important;
+}
+
+/* Cursor untuk loading state (opsional) */
+.loading,
+[aria-busy="true"] {
+    cursor: url('/images/cursor/cursor-custom.png') 16 16, wait !important;
+}
+
+/* Cursor untuk disabled element (opsional) */
+:disabled,
+[aria-disabled="true"],
+.disabled {
+    cursor: url('/images/cursor/cursor-custom.png') 16 16, not-allowed !important;
+}
+
+/* Cursor untuk draggable element (opsional) */
+[draggable="true"] {
+    cursor: url('/images/cursor/cursor-custom.png') 16 16, grab !important;
+}
+
+[draggable="true"]:active {
+    cursor: url('/images/cursor/cursor-custom.png') 16 16, grabbing !important;
+}

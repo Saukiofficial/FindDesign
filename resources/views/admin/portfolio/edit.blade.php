@@ -34,7 +34,7 @@
                         <div>
                             <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
                             <select name="category" id="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
-                                <option value="TATTO ILLUSTRATIONS" @if(old('category', $portfolioItem->category) == 'TATTO ILLUSTRATIONS') selected @endif>TATTO ILLUSTRATIONS</option>
+                                <option value="ILLUSTRATIONS" @if(old('category', $portfolioItem->category) == 'ILLUSTRATIONS') selected @endif>ILLUSTRATIONS</option>
                                 <option value="OTOMOTIF" @if(old('category', $portfolioItem->category) == 'OTOMOTIF') selected @endif>OTOMOTIF</option>
                                 <option value="BLUE COLLAR" @if(old('category', $portfolioItem->category) == 'BLUE COLLAR') selected @endif>BLUE COLLAR</option>
                             </select>
