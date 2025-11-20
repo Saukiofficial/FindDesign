@@ -99,7 +99,7 @@ export default function Hero() {
                 {/* Main Heading - Hero Image with Glow Animation */}
                 <div className="mb-6 relative">
                     <img
-                        src="/images/img-hero.png"
+                        src="/images/img-hero-2.webp"
                         alt="Welcome to FindDesign"
                         className="hero-image-animated max-w-full h-auto mx-auto"
                         style={{ maxHeight: '700px' }}

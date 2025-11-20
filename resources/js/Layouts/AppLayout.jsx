@@ -133,7 +133,7 @@ export default function AppLayout({ title, children }) {
 
                                 {/* Logo Image */}
                                 <img
-                                    src="/images/logo.png"
+                                    src="/images/logo-2.webp"
                                     alt="FindDesign"
                                     className="relative w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 object-contain transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 cursor-pointer"
                                     style={{

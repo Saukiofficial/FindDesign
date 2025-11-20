@@ -79,7 +79,7 @@
                     <!-- Logo -->
                     <div class="px-6 py-8">
                         <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
-                            <img src="{{ asset('images/logo.png') }}" alt="FindDesign Logo" class="w-12 h-12 object-contain transform hover:scale-105 transition-transform">
+                            <img src="{{ asset('images/logo-2.webp') }}" alt="FindDesign Logo" class="w-12 h-12 object-contain transform hover:scale-105 transition-transform">
                             <h1 class="text-2xl font-bold text-white drop-shadow-lg">FindDesign</h1>
                         </a>
                     </div>
