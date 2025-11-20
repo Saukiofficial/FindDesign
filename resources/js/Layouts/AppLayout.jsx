@@ -294,7 +294,7 @@ export default function AppLayout({ title, children }) {
             <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-4">
                 {/* WhatsApp Button */}
                 <a
-                    href="https://wa.me/6281234567890"
+                    href="https://wa.me/6285259281373"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group relative w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-full shadow-lg shadow-green-500/50 hover:shadow-2xl hover:shadow-green-500/70 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
@@ -316,7 +316,7 @@ export default function AppLayout({ title, children }) {
 
                 {/* Instagram Button */}
                 <a
-                    href="https://instagram.com/finddesign"
+                    href="https://instagram.com/Find_designn"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group relative w-14 h-14 bg-gradient-to-br from-pink-500 via-purple-500 to-orange-500 rounded-full shadow-lg shadow-pink-500/50 hover:shadow-2xl hover:shadow-pink-500/70 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
