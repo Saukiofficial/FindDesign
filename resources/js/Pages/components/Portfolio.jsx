@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
 
-// Komponen sekarang menerima 'portfolioItems' dari props
+
 export default function Portfolio({ portfolioItems = [] }) {
     const [activeCategory, setActiveCategory] = useState('all');
     const [selectedItem, setSelectedItem] = useState(null);
 
-    // Dynamic title berdasarkan kategori aktif
+
     const pageTitle = activeCategory === 'all'
         ? 'Portfolio - All Works'
         : `Portfolio - ${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)}`;
 
-    // Membuat daftar kategori secara dinamis dari data yang ada
+
     const categories = [
         { id: 'all', name: 'All Works' },
-        // Menggunakan Set untuk mendapatkan kategori unik, lalu memetakannya
+
         ...[...new Set(portfolioItems.map(item => item.category))].map(category => ({
             id: category,
-            name: category.charAt(0).toUpperCase() + category.slice(1) // Kapitalisasi huruf pertama
+            name: category.charAt(0).toUpperCase() + category.slice(1)
         }))
     ];
 
-    // Karakter ilustrator untuk setiap kategori
+ 
     const getCharacterIcon = (categoryId) => {
         const characters = {
             'all': {

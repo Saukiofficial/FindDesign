@@ -1,51 +1,95 @@
 <?php
 
 use App\Http\Controllers\Admin\PortfolioController;
+use App\Http\Controllers\Admin\FeaturedWorkController;
 use App\Http\Controllers\ProfileController;
+// PENTING: Import Model agar bisa mengambil data dari database
 use App\Models\PortfolioItem;
+use App\Models\FeaturedWork;
+use App\Models\Visitor; // Tambahan: Model Visitor untuk tracking
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Http\Request; // Tambahan: Request untuk ambil IP
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| File ini mengatur semua rute untuk aplikasi Anda.
 |
 */
 
-// Rute untuk Halaman Landing (Publik - Tetap menggunakan Inertia/React)
-Route::get('/', function () {
+
+Route::get('/', function (Request $request) {
+
+
+    try {
+        Visitor::firstOrCreate([
+            'ip_address' => $request->ip(),
+            'visit_date' => now()->toDateString(),
+        ]);
+    } catch (\Exception $e) {
+
+    }
+
+
     return Inertia::render('Landing', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+
+
         'portfolioItems' => PortfolioItem::all(),
+
+
+        'featuredWorks' => FeaturedWork::latest()->get()->map(function($item) {
+             return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'desc' => $item->description,
+
+                'src' => asset('storage/' . $item->image),
+            ];
+        }),
     ]);
 });
 
-// PERUBAHAN: Rute Dasbor sekarang menggunakan Blade
+
 Route::get('/dashboard', function () {
-    return view('dashboard'); // Mengarahkan ke file dashboard.blade.php
+
+    $portfolioCount = PortfolioItem::count();
+    $featuredCount = FeaturedWork::count();
+
+
+    $visitorCount = 0;
+    try {
+        $visitorCount = Visitor::count();
+    } catch (\Exception $e) {
+
+    }
+
+
+    return view('dashboard', compact('portfolioCount', 'featuredCount', 'visitorCount'));
+
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Rute-rute yang memerlukan autentikasi
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Grup Rute untuk Area Admin (Sudah menggunakan Blade)
+
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+    // Manajemen Portfolio
     Route::resource('portfolio', PortfolioController::class);
+
+    // Manajemen Featured Works
+    Route::resource('featured-works', FeaturedWorkController::class);
 });
 
-
 require __DIR__.'/auth.php';
-

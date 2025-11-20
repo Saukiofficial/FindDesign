@@ -7,18 +7,19 @@ import Portfolio from './components/Portfolio.jsx';
 import Testimonials from './components/Testimonials.jsx';
 import Contact from './components/Contact.jsx';
 
-// Terima 'portfolioItems' dari props yang dikirim oleh controller
-export default function Landing({ portfolioItems }) {
+
+export default function Landing({ portfolioItems, featuredWorks }) {
     return (
         <AppLayout>
             <Hero />
-            <About />
+
+            {/* 2. PENTING: Oper data ke komponen About di sini */}
+            <About featuredWorks={featuredWorks} />
+
             <Services />
-            {/* Kirim props ke komponen Portfolio */}
             <Portfolio portfolioItems={portfolioItems} />
             <Testimonials />
             <Contact />
         </AppLayout>
     );
 }
-

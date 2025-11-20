@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="space-y-6">
-        {{-- Menampilkan Error Validasi --}}
+       
         @if ($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                 <strong class="font-bold">Opps! Terjadi kesalahan.</strong>
@@ -14,23 +14,23 @@
             </div>
         @endif
 
-        {{-- Formulir Edit Item --}}
+
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Edit Item Portfolio</h3>
-                {{-- Formulir mengarah ke route update, dengan method PUT --}}
+
                 <form action="{{ route('admin.portfolio.update', $portfolioItem->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf
-                    @method('PUT') {{-- Method spoofing untuk request UPDATE --}}
+                    @method('PUT')
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {{-- Judul --}}
+
                         <div>
                             <label for="title" class="block text-sm font-medium text-gray-700">Judul</label>
                             <input type="text" name="title" id="title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('title', $portfolioItem->title) }}" required>
                         </div>
 
-                        {{-- Kategori --}}
+
                         <div>
                             <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
                             <select name="category" id="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>

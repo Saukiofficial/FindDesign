@@ -1,23 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-export default function About() {
+
+export default function About({ featuredWorks = [] }) {
     const [isVisible, setIsVisible] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    // Array of all works
-    const works = [
-        { src: '/images/work1.jpg', title: 'DIRT ENERGY design', desc: 'A skeleton worker is climbing a utility pole. It is an advertisement for "Dirt Energy" drink with an orange and pineapple flavor.' },
-        { src: '/images/work2.jpg', title: 'SPARTRON', desc: 'A powerful Spartan warrior with golden armor and wings stands in fire. He is holding a spear and a shield.' },
-        { src: '/images/work3.jpg', title: 'CULTURE OF WHISPER ', desc: 'This image shows several logo designs for "Culture of Whispers." The main design is a bearded skeleton in a hood, surrounded by cards, roses, and dice.' },
-        { src: '/images/work4.jpg', title: 'BLUE COLLAR BADGE', desc: 'These are four "Blue Collar" designs. They all feature skeletons dressed as workers, with themes of hard work and brotherhood.' },
-        { src: '/images/work5.jpg', title: 'GUARDIAN', desc: 'A fierce, demonic ram with large horns and glowing red eyes is shown above a motorcycle engine. The word "GUARDIAN" is at the top.' },
-        { src: '/images/work6.jpg', title: 'MOJAVE DESERT', desc: 'This is a poster for an off-road race in the Mojave Desert. It shows dirt bikes, ATVs, and UTVs racing, with a giant monster hand in the middle.' },
-        { src: '/images/work7.jpg', title: 'STANCE AUTO', desc: 'A yellow sports car (Honda Civic) is shown with its modified engine. An angry, muscular Pikachu stands next to the car.' },
-        { src: '/images/work8.jpg', title: 'BLUE COLLAR HOLIDAY', desc: 'This image shows several designs for "Happy Minds Clean Money." It mixes a worker theme (a skeleton in a hard hat) with a tropical beach holiday.' },
-        { src: '/images/work9.jpg', title: 'RX KING JUNGGLE', desc: 'A T-Rex is riding an "RX-KING" motorcycle. A giant ape (King Kong) is on its back, attacking it, while a volcano explodes in the background.' },
-        { src: '/images/work10.jpg', title: 'CHAMPIONS WATERJET WORL CUP', desc: 'This design celebrates a jet ski champion. It shows the racer holding a trophy, a large "4x" logo, and several jet skis racing on the water'}
-    ];
+
+    const works = featuredWorks;
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -62,7 +52,7 @@ export default function About() {
             window.removeEventListener('keydown', handleKeyDown);
             document.body.style.overflow = 'unset';
         };
-    }, [selectedImage, currentImageIndex]);
+    }, [selectedImage, currentImageIndex, works]);
 
     const openImage = (index) => {
         setCurrentImageIndex(index);
@@ -70,12 +60,14 @@ export default function About() {
     };
 
     const goToNext = () => {
+        if (works.length === 0) return;
         const nextIndex = (currentImageIndex + 1) % works.length;
         setCurrentImageIndex(nextIndex);
         setSelectedImage(works[nextIndex]);
     };
 
     const goToPrevious = () => {
+        if (works.length === 0) return;
         const prevIndex = (currentImageIndex - 1 + works.length) % works.length;
         setCurrentImageIndex(prevIndex);
         setSelectedImage(works[prevIndex]);
@@ -235,8 +227,6 @@ export default function About() {
                                 </div>
                             ))}
                         </div>
-
-                        {/* CTA Button with Glow Effect */}
                     </div>
                 </div>
 
@@ -262,7 +252,7 @@ export default function About() {
                                         alt={work.title}
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         onError={(e) => {
-                                            e.target.src = `https://placehold.co/800x600/0f172a/ef4444?text=Featured+Work+${index + 1}`;
+                                            e.target.src = `https://placehold.co/800x600/0f172a/ef4444?text=${encodeURIComponent(work.title)}`;
                                         }}
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
@@ -274,7 +264,7 @@ export default function About() {
                                                 Best Work
                                             </span>
                                             <h4 className="text-2xl font-bold text-white mb-2">{work.title}</h4>
-                                            <p className="text-slate-300 text-sm">{work.desc}</p>
+                                            <p className="text-slate-300 text-sm line-clamp-2">{work.desc}</p>
                                             <p className="text-red-400 text-xs mt-2 flex items-center gap-1">
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -288,6 +278,13 @@ export default function About() {
                             </div>
                         ))}
                     </div>
+
+                    {/* Show message if no works found */}
+                    {works.length === 0 && (
+                        <div className="text-center text-slate-500 py-12">
+                            <p>Belum ada item portfolio yang ditambahkan.</p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Professional Image Modal/Lightbox with Slider */}

@@ -70,51 +70,6 @@ export default function Services() {
             gradient: 'from-red-600 to-rose-500',
             borderGlow: 'red-500'
         },
-        // {
-        //     id: 4,
-        //     icon: '🎯',
-        //     title: 'Brand Identity',
-        //     shortDesc: 'Complete visual identity for your brand',
-        //     features: [
-        //         'Logo Design & Branding',
-        //         'Brand Guidelines',
-        //         'Marketing Materials',
-        //         'Social Media Assets',
-        //         'Packaging Design'
-        //     ],
-        //     gradient: 'from-rose-600 to-red-500',
-        //     borderGlow: 'rose-500'
-        // },
-        // {
-        //     id: 5,
-        //     icon: '✨',
-        //     title: 'NFT Art',
-        //     shortDesc: 'Unique digital collectibles for the metaverse',
-        //     features: [
-        //         'NFT Collection Design',
-        //         'Generative Art Systems',
-        //         'Avatar & PFP Collections',
-        //         'Smart Contract Art',
-        //         'Metadata & Rarity Design'
-        //     ],
-        //     gradient: 'from-red-500 to-red-600',
-        //     borderGlow: 'red-500'
-        // },
-        // {
-        //     id: 6,
-        //     icon: '🎮',
-        //     title: 'Game Art',
-        //     shortDesc: 'Immersive visuals for gaming experiences',
-        //     features: [
-        //         'Character & Creature Design',
-        //         'Environment & Props',
-        //         'UI/UX Design',
-        //         'Sprite Animation',
-        //         'Concept Art & Assets'
-        //     ],
-        //     gradient: 'from-red-600 to-red-700',
-        //     borderGlow: 'red-600'
-        // }
     ];
 
     const processes = [
@@ -213,19 +168,6 @@ export default function Services() {
                                         </li>
                                     ))}
                                 </ul>
-
-                                {/* Learn More Button
-                                <button className={`group/btn relative inline-flex items-center gap-2 text-sm font-semibold text-white/60 hover:text-white transition-colors duration-300`}>
-                                    <span>Learn More</span>
-                                    <svg
-                                        className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </button> */}
 
                                 {/* Corner Decorations */}
                                 <div className={`absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-${service.borderGlow}/0 group-hover:border-${service.borderGlow}/50 rounded-tr-2xl transition-all duration-500`}></div>
