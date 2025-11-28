@@ -20,8 +20,10 @@ export default function Hero() {
 
     return (
         <section id="hero" className="relative h-screen flex items-center justify-center overflow-hidden">
-            {/* Custom Animations */}
-            <style jsx>{`
+            {/* FIX: Menggunakan tag style standar.
+               Jika Anda menggunakan Vite/Inertia biasa, 'jsx' attribute mungkin tidak diproses.
+            */}
+            <style>{`
                 @keyframes glow-pulse {
                     0%, 100% {
                         filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.3))
@@ -39,6 +41,10 @@ export default function Hero() {
 
                 .hero-image-animated {
                     animation: glow-pulse 3s ease-in-out infinite;
+                    /* Hardware acceleration untuk iOS agar animasi mulus */
+                    transform: translateZ(0);
+                    -webkit-transform: translateZ(0);
+                    backface-visibility: hidden;
                 }
             `}</style>
 
@@ -51,7 +57,8 @@ export default function Hero() {
                         top: `${mousePosition.y}%`,
                         left: `${mousePosition.x}%`,
                         transform: 'translate(-50%, -50%)',
-                        transition: 'top 0.5s ease-out, left 0.5s ease-out'
+                        transition: 'top 0.5s ease-out, left 0.5s ease-out',
+                        willChange: 'top, left' /* Optimasi performa render */
                     }}
                 ></div>
                 <div
@@ -61,7 +68,8 @@ export default function Hero() {
                         left: `${100 - mousePosition.x}%`,
                         transform: 'translate(-50%, -50%)',
                         transition: 'top 0.5s ease-out, left 0.5s ease-out',
-                        animationDelay: '1s'
+                        animationDelay: '1s',
+                        willChange: 'top, left'
                     }}
                 ></div>
 
@@ -97,11 +105,20 @@ export default function Hero() {
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}>
                 {/* Main Heading - Hero Image with Glow Animation */}
-                <div className="mb-6 relative">
+                {/* FIX: Menambahkan min-h-[300px] atau aspect-ratio pada container
+                    untuk mencegah layout collapse saat gambar belum muncul.
+                */}
+                <div className="mb-6 relative min-h-[300px] flex items-center justify-center">
+                    {/* FIX UTAMA: Menambahkan width dan height.
+                        Ganti 800 dan 800 dengan ukuran ASLI gambar Anda.
+                    */}
                     <img
                         src="/images/img-hero-2.webp"
                         alt="Welcome to FindDesign"
-                        className="hero-image-animated max-w-full h-auto mx-auto"
+                        width="800"
+                        height="800"
+                        fetchPriority="high" // Prioritas load tinggi untuk Hero image
+                        className="hero-image-animated max-w-full h-auto mx-auto object-contain"
                         style={{ maxHeight: '700px' }}
                     />
                 </div>
