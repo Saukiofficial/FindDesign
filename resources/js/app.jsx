@@ -5,7 +5,8 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
-// PERBAIKAN: Impor 'route' sebagai named export menggunakan kurung kurawal {}.
+// PERBAIKAN: Pastikan ziggy-js sudah terinstall via npm (npm install ziggy-js)
+// Jika error local, cek vite.config.js untuk alias ziggy
 import { route } from 'ziggy-js';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -16,7 +17,7 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        // Cek jika properti ziggy ada sebelum digunakan
+        // Mengatur helper route() global agar bisa dipanggil di semua komponen
         if (props.initialPage.props.ziggy) {
             const { ziggy } = props.initialPage.props;
             window.route = (name, params, absolute) => route(name, params, absolute, ziggy);
@@ -25,7 +26,8 @@ createInertiaApp({
         root.render(<App {...props} />);
     },
     progress: {
-        color: '#4B5563',
+        // PERBAIKAN KOSMETIK:
+        // Mengubah warna loading bar ke Merah Brand (#DC2626) agar sesuai tema
+        color: '#DC2626',
     },
 });
-
