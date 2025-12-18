@@ -51,3 +51,39 @@ textarea {
 [draggable="true"]:active {
     cursor: url('/images/cursor/cursor-custom.png') 16 16, grabbing !important;
 }
+
+/* Media Query untuk Mobile & Tablet */
+@media (max-width: 1024px) {
+    /* Matikan Backdrop Filter yang berat di mobile */
+    .backdrop-blur-sm,
+    .backdrop-blur-md,
+    .backdrop-blur-xl,
+    .backdrop-blur-3xl {
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+        /* Ganti blur dengan background yang agak solid agar teks tetap terbaca */
+        background-color: rgba(15, 23, 42, 0.95) !important; /* Slate-900 dengan opacity 95% */
+    }
+
+    /* Kurangi radius blur pada elemen dekorasi background (blobs) */
+    .filter.blur-3xl {
+        filter: blur(40px) !important; /* Turunkan dari default tailwind yang sangat tinggi */
+        opacity: 0.3 !important; /* Kurangi opacity agar GPU tidak kerja keras blending warna */
+    }
+
+    /* Matikan animasi pulse background di mobile untuk menghemat baterai & GPU */
+    .animate-pulse {
+        animation: none !important;
+    }
+
+    /* Pastikan hardware acceleration aktif untuk elemen yang bergerak */
+    .group:hover {
+        transform: translateZ(0);
+        will-change: transform;
+    }
+}
+
+/* Fix spesifik untuk Safari iOS agar scroll tidak flash */
+html, body {
+    -webkit-overflow-scrolling: touch;
+}
