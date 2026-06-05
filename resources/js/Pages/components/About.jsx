@@ -1,21 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-export default function About({ featuredWorks = [] }) {
+export default function About({ aboutSetting = null }) {
     const [isVisible, setIsVisible] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [isMobile, setIsMobile] = useState(false);
-
-    const works = featuredWorks;
 
     useEffect(() => {
-        // Cek apakah device mobile untuk mematikan efek berat via JS state juga
-        const checkMobile = () => {
-            setIsMobile(window.innerWidth < 768);
-        };
-
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
+        const element = document.getElementById('about');
+        if (!element) return;
 
         const observer = new IntersectionObserver(
             (entries) => {
@@ -25,270 +15,351 @@ export default function About({ featuredWorks = [] }) {
                     }
                 });
             },
-            { threshold: 0.1 }
+            { threshold: 0.15 }
         );
 
-        const element = document.getElementById('about');
-        if (element) observer.observe(element);
+        observer.observe(element);
 
-        return () => {
-            window.removeEventListener('resize', checkMobile);
-            if (element) observer.unobserve(element);
-        };
+        return () => observer.disconnect();
     }, []);
 
-    // Keyboard support for lightbox
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (!selectedImage) return;
+    const about = useMemo(() => {
+        const stats =
+            Array.isArray(aboutSetting?.stats) && aboutSetting.stats.length > 0
+                ? aboutSetting.stats
+                : [
+                      { number: '500+', label: 'Projects Completed' },
+                      { number: '480+', label: 'Happy Clients' },
+                      { number: '8+', label: 'Years Experience' },
+                      { number: '500+', label: 'Portfolio' },
+                  ];
 
-            if (e.key === 'Escape') {
-                setSelectedImage(null);
-            } else if (e.key === 'ArrowLeft') {
-                goToPrevious();
-            } else if (e.key === 'ArrowRight') {
-                goToNext();
-            }
+        return {
+            badgeText: aboutSetting?.badge_text || 'ABOUT US',
+            title: aboutSetting?.title || 'Meet The Founder',
+            founderImage:
+                aboutSetting?.founder_image_url || '/images/owner/founder.jpg',
+            founderName: aboutSetting?.founder_name || 'Afandy',
+            founderPosition:
+                aboutSetting?.founder_position || 'Founder & Creative Director',
+            quote:
+                aboutSetting?.quote ||
+                'Design is not just what it looks like, it’s how it works and how it makes people feel.',
+            description1:
+                aboutSetting?.description_1 ||
+                'Founded in 2015, FindDesign began with a simple belief: a single line can spark a powerful idea.',
+            description2:
+                aboutSetting?.description_2 ||
+                'What started as a passion for pencil strokes has grown into a creative studio trusted by 500+ clients worldwide.\n\nWith over 8 years of experience in branding, illustration, and digital design, I’m committed to crafting visuals that not only look stunning, but also tell stories that connect.',
+            stats,
         };
+    }, [aboutSetting]);
 
-        if (selectedImage) {
-            window.addEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = 'hidden';
+    const descriptionParagraphs = useMemo(() => {
+        return String(about.description2)
+            .split('\n')
+            .map((item) => item.trim())
+            .filter(Boolean);
+    }, [about.description2]);
+
+    const getStatIcon = (index) => {
+        const className = 'h-6 w-6';
+
+        if (index === 1) {
+            return (
+                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.8"
+                        d="M17 20h5V4H2v16h5m10 0v-2a4 4 0 00-4-4H11a4 4 0 00-4 4v2m10 0H7m10-10a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                </svg>
+            );
         }
 
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = 'unset';
-        };
-    }, [selectedImage, currentImageIndex, works]);
-
-    const openImage = (index) => {
-        setCurrentImageIndex(index);
-        setSelectedImage(works[index]);
-    };
-
-    const goToNext = () => {
-        if (works.length === 0) return;
-        const nextIndex = (currentImageIndex + 1) % works.length;
-        setCurrentImageIndex(nextIndex);
-        setSelectedImage(works[nextIndex]);
-    };
-
-    const goToPrevious = () => {
-        if (works.length === 0) return;
-        const prevIndex = (currentImageIndex - 1 + works.length) % works.length;
-        setCurrentImageIndex(prevIndex);
-        setSelectedImage(works[prevIndex]);
-    };
-
-    const stats = [
-        { number: '500+', label: 'Projects Completed' },
-        { number: '480+', label: 'Happy Clients' },
-        { number: '8+', label: 'Years Experience' },
-        { number: '500+', label: 'Portfolio' }
-    ];
-
-    const values = [
-        {
-            title: 'Innovation',
-            description: 'We constantly push boundaries to create unique and innovative designs that set new standards'
-        },
-        {
-            title: 'Quality',
-            description: 'Every project is crafted with meticulous attention to detail and precision'
-        },
-        {
-            title: 'Collaboration',
-            description: 'We work closely with clients to bring their vision to life through transparent communication'
-        },
-        {
-            title: 'Excellence',
-            description: 'Fast delivery without compromising on quality, ensuring exceptional results every time'
+        if (index === 2) {
+            return (
+                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.8"
+                        d="M8 7V3m8 4V3m-9 8h10m-12 9h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v11a2 2 0 002 2z"
+                    />
+                </svg>
+            );
         }
-    ];
+
+        if (index === 3) {
+            return (
+                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.8"
+                        d="M3 7a2 2 0 012-2h5l2 2h7a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"
+                    />
+                </svg>
+            );
+        }
+
+        return (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.8"
+                    d="M20 7L12 3 4 7l8 4 8-4z"
+                />
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.8"
+                    d="M4 12l8 4 8-4"
+                />
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.8"
+                    d="M4 17l8 4 8-4"
+                />
+            </svg>
+        );
+    };
+
+    const titleParts = useMemo(() => {
+        const fullTitle = String(about.title || 'Meet The Founder');
+        const words = fullTitle.split(' ');
+
+        if (words.length < 2) {
+            return {
+                start: fullTitle,
+                highlight: '',
+            };
+        }
+
+        return {
+            start: words.slice(0, -1).join(' '),
+            highlight: words[words.length - 1],
+        };
+    }, [about.title]);
 
     return (
-        <section id="about" className="relative py-32 bg-slate-950 overflow-hidden transform-gpu">
-            {/* OPTIMISASI: Background Pattern dikurangi opacity-nya dan dimatikan animasi di mobile */}
-            <div className="absolute inset-0 opacity-30 pointer-events-none">
-                {/* Hanya render blobs blur di layar besar (md ke atas) */}
-                <div className="hidden md:block absolute top-0 left-1/4 w-96 h-96 bg-red-600/20 rounded-full filter blur-3xl"></div>
-                <div className="hidden md:block absolute bottom-0 right-1/4 w-96 h-96 bg-red-500/20 rounded-full filter blur-3xl"></div>
+        <section
+            id="about"
+            className="relative overflow-hidden bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
+        >
+            <style>{`
+                @keyframes aboutGlow {
+                    0%, 100% {
+                        opacity: 0.45;
+                    }
+                    50% {
+                        opacity: 0.9;
+                    }
+                }
+
+                @keyframes aboutLinePulse {
+                    0%, 100% {
+                        transform: scaleX(0.85);
+                        opacity: 0.7;
+                    }
+                    50% {
+                        transform: scaleX(1);
+                        opacity: 1;
+                    }
+                }
+
+                .about-glow-animate {
+                    animation: aboutGlow 4.5s ease-in-out infinite;
+                }
+
+                .about-line-pulse {
+                    animation: aboutLinePulse 2.8s ease-in-out infinite;
+                    transform-origin: center;
+                }
+
+                @media (prefers-reduced-motion: reduce) {
+                    .about-glow-animate,
+                    .about-line-pulse {
+                        animation: none !important;
+                    }
+                }
+            `}</style>
+
+            {/* background */}
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(220,38,38,0.16),transparent_28%),radial-gradient(circle_at_92%_82%,rgba(220,38,38,0.14),transparent_24%),linear-gradient(180deg,#020202_0%,#030303_50%,#050505_100%)]" />
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(239,68,68,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(239,68,68,0.04)_1px,transparent_1px)] bg-[size:72px_72px]" />
+
+            <div className="pointer-events-none absolute right-0 top-0 h-full w-[24%] opacity-30">
+                <div className="h-full w-full bg-[radial-gradient(circle,rgba(239,68,68,0.4)_1px,transparent_1px)] bg-[size:16px_16px]" />
             </div>
 
-            {/* Subtle Grid Pattern */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(239,68,68,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(239,68,68,0.03)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+            <div className="pointer-events-none absolute inset-0">
+                <div className="absolute left-4 top-4 h-6 w-6 rounded-tl-[20px] border-l border-t border-red-500/60 sm:h-8 sm:w-8" />
+                <div className="absolute right-4 top-4 h-6 w-6 rounded-tr-[20px] border-r border-t border-red-500/60 sm:h-8 sm:w-8" />
+                <div className="absolute bottom-4 right-4 h-6 w-6 rounded-br-[20px] border-b border-r border-red-500/60 sm:h-8 sm:w-8" />
+                <div className="absolute bottom-4 left-4 h-6 w-6 rounded-bl-[20px] border-b border-l border-red-500/60 sm:h-8 sm:w-8" />
+            </div>
 
-            <div className="container mx-auto px-6 lg:px-12 relative z-10">
-                {/* Header */}
-                <div className="text-center mb-24">
-                    <div className="inline-flex items-center gap-2 mb-6 px-6 py-2 border border-red-500/30 rounded-full bg-slate-900/50">
-                        <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                        <span className="text-red-400 text-sm font-semibold tracking-widest uppercase">About Us</span>
-                    </div>
-                    <h2 className="text-5xl lg:text-7xl font-bold mb-6 tracking-tight">
-                        <span className="bg-gradient-to-r from-white via-red-100 to-white bg-clip-text text-transparent">
-                            Meet The Founder
+            <div className="relative mx-auto max-w-[1600px] rounded-[28px] border border-red-500/18 bg-[linear-gradient(180deg,rgba(6,6,6,0.92)_0%,rgba(4,4,4,0.96)_100%)] px-5 py-10 shadow-[0_0_80px_rgba(220,38,38,0.08)] sm:px-8 lg:px-12 lg:py-14">
+                {/* header */}
+                <div
+                    className={`mb-12 text-center transition-all duration-1000 ${
+                        isVisible
+                            ? 'translate-y-0 opacity-100'
+                            : 'translate-y-8 opacity-0'
+                    }`}
+                >
+                    <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-red-500/40 bg-black/55 px-6 py-3 shadow-[0_0_24px_rgba(220,38,38,0.16)]">
+                        <span className="flex h-4 w-4 items-center justify-center rounded-full border border-red-500/60">
+                            <span className="h-2 w-2 rounded-full bg-red-500 about-glow-animate" />
                         </span>
+                        <span className="text-xs font-bold uppercase tracking-[0.34em] text-red-400 sm:text-sm">
+                            {about.badgeText}
+                        </span>
+                    </div>
+
+                    <h2 className="text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:text-7xl">
+                        <span>{titleParts.start} </span>
+                        {titleParts.highlight && (
+                            <span className="bg-gradient-to-b from-red-300 via-red-400 to-red-600 bg-clip-text text-transparent">
+                                {titleParts.highlight}
+                            </span>
+                        )}
                     </h2>
-                    <div className="w-24 h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent mx-auto"></div>
-                </div>
 
-                {/* Founder Section */}
-                <div className="grid lg:grid-cols-5 gap-16 items-center mb-32">
-                    <div className={`lg:col-span-2 relative group transition-all duration-1000 delay-100 ${
-                        isVisible ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-20 scale-95'
-                    }`}>
-                        {/* OPTIMISASI: Hapus animated background glow di mobile */}
-                        <div className="hidden md:block absolute -inset-4 bg-gradient-to-r from-red-600 via-red-500 to-orange-500 rounded-3xl opacity-0 group-hover:opacity-30 blur-3xl transition-all duration-700"></div>
-
-                        <div className="relative rounded-2xl overflow-hidden border-2 border-slate-800/50 group-hover:border-red-500/50 transition-all duration-500 shadow-2xl group-hover:shadow-red-500/50 bg-slate-900">
-                            <div className="aspect-[3/4] relative">
-                                <img
-                                    src="/images/owner/founder.jpg"
-                                    alt="Founder of FindDesign"
-                                    // OPTIMISASI: Tambahkan loading lazy dan decoding async
-                                    loading="lazy"
-                                    decoding="async"
-                                    className="w-full h-full object-cover transition-all duration-1000 md:group-hover:scale-110 md:group-hover:rotate-1"
-                                    onError={(e) => {
-                                        e.target.src = 'https://placehold.co/600x800/0f172a/ef4444?text=Founder';
-                                    }}
-                                />
-
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent md:group-hover:via-slate-950/40 transition-all duration-500"></div>
-
-                                {/* Info Card - Gunakan bg-slate-900 solid di mobile (md:backdrop-blur) */}
-                                <div className="absolute bottom-0 left-0 right-0 p-8 transform transition-all duration-500 md:group-hover:-translate-y-2">
-                                    <div className="space-y-2 bg-slate-900/95 md:bg-slate-900/30 md:backdrop-blur-sm p-6 rounded-xl border border-slate-700/30 md:group-hover:border-red-500/30 transition-all duration-500 shadow-xl">
-                                        <h3 className="text-3xl font-bold text-white md:group-hover:text-red-400 transition-colors duration-300">Afandy</h3>
-                                        <p className="text-red-400 font-medium text-lg">Founder & Creative Director</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Content Side */}
-                    <div className="lg:col-span-3 space-y-10">
-                        <div className={`space-y-6 transition-all duration-1000 delay-300 ${
-                            isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'
-                        }`}>
-                            <div className="relative pl-6 border-l-4 border-red-500 group hover:border-red-400 transition-colors duration-300">
-                                <p className="text-2xl lg:text-3xl font-light text-white/90 leading-relaxed italic group-hover:text-white transition-colors duration-300">
-                                    "Agus Afandy – Owner of FindDesign and Professional Illustrator who has been creating since 2015."
-                                </p>
-                            </div>
-
-                            <div className="space-y-5">
-                                <p className="text-lg text-slate-300 leading-relaxed">
-                                    Founded in 2015, <span className="text-red-400 font-semibold">FindDesign</span>. What started as a simple pencil stroke has now brought to life 500+ projects for clients worldwide.
-                                </p>
-                                <p className="text-lg text-slate-300 leading-relaxed">
-                                   With over 8 years of experience in the creative industry, I believe that every brand has a unique story worth telling through captivating visuals.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Stats Grid */}
-                        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-6 transition-all duration-1000 delay-500 ${
-                            isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-                        }`}>
-                            {stats.map((stat, index) => (
-                                <div key={index} className="text-center group md:hover:scale-110 transition-transform duration-300">
-                                    <div className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-red-500 to-red-400 bg-clip-text text-transparent mb-2">
-                                        {stat.number}
-                                    </div>
-                                    <div className="text-sm text-slate-400 font-medium">{stat.label}</div>
-                                </div>
-                            ))}
-                        </div>
+                    <div className="mx-auto mt-7 flex w-44 items-center justify-center">
+                        <span className="h-px flex-1 bg-gradient-to-r from-transparent to-red-500/60" />
+                        <span className="about-line-pulse mx-4 h-[5px] w-14 rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,0.9)]" />
+                        <span className="h-px flex-1 bg-gradient-to-l from-transparent to-red-500/60" />
                     </div>
                 </div>
 
-                {/* Best Works Gallery */}
-                <div className="mb-32">
-                    <div className="text-center mb-16">
-                        <h3 className="text-4xl lg:text-5xl font-bold text-white mb-4">Featured Works</h3>
-                        <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-                            A glimpse into our finest creations
-                        </p>
-                    </div>
+                {/* content */}
+                <div className="grid items-start gap-10 lg:grid-cols-[0.95fr_1.25fr] lg:gap-14">
+                    {/* left card */}
+                    <div
+                        className={`transition-all duration-1000 delay-100 ${
+                            isVisible
+                                ? 'translate-x-0 opacity-100'
+                                : '-translate-x-10 opacity-0'
+                        }`}
+                    >
+                        <div className="relative rounded-[28px] border border-red-500/22 bg-[linear-gradient(180deg,rgba(18,18,18,0.95)_0%,rgba(8,8,8,0.98)_100%)] p-4 shadow-[0_0_45px_rgba(220,38,38,0.10)]">
+                            <div className="absolute -inset-[1px] rounded-[28px] bg-gradient-to-r from-red-500/0 via-red-500/25 to-red-500/0 opacity-50 blur-xl" />
 
-                    <div className="grid lg:grid-cols-2 gap-8">
-                        {works.map((work, index) => (
-                            <div
-                                key={index}
-                                onClick={() => openImage(index)}
-                                // OPTIMISASI: Gunakan bg solid di mobile untuk performa
-                                className="relative group bg-slate-900 border border-slate-800/50 rounded-2xl overflow-hidden md:bg-slate-900/40 md:backdrop-blur-sm md:hover:border-red-500/40 transition-all duration-500 cursor-pointer"
-                            >
-                                <div className="aspect-[4/3] relative overflow-hidden">
+                            <div className="relative rounded-[20px] border border-red-500/22 bg-black/70 p-4">
+                                <div className="relative overflow-hidden rounded-[18px] border border-white/12 bg-[#080808]">
+                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_75%,rgba(220,38,38,0.22),transparent_22%),linear-gradient(135deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.02)_28%,transparent_28%,transparent_100%)]" />
+
+                                    <div className="absolute left-0 top-[62%] h-1 w-[62%] rotate-[-36deg] bg-gradient-to-r from-red-600 via-red-400 to-transparent shadow-[0_0_24px_rgba(239,68,68,0.95)]" />
+                                    <div className="absolute bottom-0 left-[56%] top-[12%] w-[3px] bg-gradient-to-b from-transparent via-red-400 to-red-600 shadow-[0_0_26px_rgba(239,68,68,0.9)]" />
+                                    <div className="absolute bottom-0 left-0 right-0 h-[22%] bg-gradient-to-t from-red-950/20 via-red-700/6 to-transparent" />
+
                                     <img
-                                        src={work.src}
-                                        alt={work.title}
+                                        src={about.founderImage}
+                                        alt={about.founderName}
                                         loading="lazy"
                                         decoding="async"
-                                        className="w-full h-full object-cover transition-transform duration-700 md:group-hover:scale-110"
-                                        onError={(e) => {
-                                            e.target.src = `https://placehold.co/800x600/0f172a/ef4444?text=${encodeURIComponent(work.title)}`;
+                                        className="relative z-10 aspect-[4/4.1] w-full object-cover"
+                                        onError={(event) => {
+                                            event.currentTarget.src =
+                                                'https://placehold.co/800x900/0b0b0b/ef4444?text=Founder';
                                         }}
                                     />
-                                    {/* Gradient overlay statis lebih ringan dari opacity transition */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent opacity-60 md:group-hover:opacity-80"></div>
+                                </div>
 
-                                    <div className="absolute inset-0 flex flex-col justify-end p-8 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500">
-                                        <div className="transform md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500">
-                                            <span className="inline-block px-4 py-1 bg-red-500 text-white text-sm font-semibold rounded-full mb-3">
-                                                Best Work
-                                            </span>
-                                            <h4 className="text-2xl font-bold text-white mb-2">{work.title}</h4>
+                                <div className="relative mt-5 overflow-hidden rounded-[18px] border border-red-500/20 bg-[linear-gradient(180deg,rgba(14,14,14,0.96)_0%,rgba(8,8,8,0.98)_100%)] px-6 py-6 shadow-[0_0_26px_rgba(220,38,38,0.08)]">
+                                    <div className="absolute right-6 top-5 h-16 w-20 opacity-30">
+                                        <div className="h-full w-full bg-[radial-gradient(circle,rgba(239,68,68,0.7)_1px,transparent_1px)] bg-[size:10px_10px]" />
+                                    </div>
+
+                                    <div className="flex items-start gap-4">
+                                        <span className="mt-2 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-red-500/60">
+                                            <span className="h-2.5 w-2.5 rounded-full bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.95)]" />
+                                        </span>
+
+                                        <div>
+                                            <h3 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
+                                                {about.founderName}
+                                            </h3>
+                                            <p className="mt-2 text-base font-medium text-red-400 sm:text-lg">
+                                                {about.founderPosition}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        ))}
+                        </div>
                     </div>
-                </div>
 
-                {/* Core Values */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {values.map((value, index) => (
-                        <div
-                            key={index}
-                            className="relative group bg-slate-900 border border-slate-800/50 rounded-xl p-8 md:bg-slate-900/40 md:backdrop-blur-sm md:hover:border-red-500/40 transition-all duration-500"
-                        >
-                            <div className="relative">
-                                <h4 className="text-xl font-bold text-white mb-3 md:group-hover:text-red-400 transition-colors duration-300">
-                                    {value.title}
-                                </h4>
-                                <p className="text-slate-400 text-sm leading-relaxed">
-                                    {value.description}
+                    {/* right content */}
+                    <div
+                        className={`transition-all duration-1000 delay-200 ${
+                            isVisible
+                                ? 'translate-x-0 opacity-100'
+                                : 'translate-x-10 opacity-0'
+                        }`}
+                    >
+                        <div className="relative">
+                            <div className="mb-8 flex items-start gap-5">
+                                <div className="mt-1 h-28 w-1.5 rounded-full bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.95)]" />
+
+                                <div className="relative flex-1">
+                                    <div className="absolute -left-1 -top-5 text-6xl font-black leading-none text-red-500">
+                                        “
+                                    </div>
+
+                                    <p className="pl-8 pr-8 text-2xl font-light italic leading-relaxed text-white/92 sm:text-[2rem] lg:text-[3rem] lg:leading-[1.35]">
+                                        {about.quote}
+                                    </p>
+
+                                    <div className="absolute -bottom-3 right-0 text-6xl font-black leading-none text-red-500/80 sm:text-7xl">
+                                        ”
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-5 text-lg leading-relaxed text-white/72 sm:text-xl">
+                                <p>
+                                    {about.description1}
                                 </p>
+
+                                {descriptionParagraphs.map((paragraph, index) => (
+                                    <p key={index}>
+                                        {paragraph}
+                                    </p>
+                                ))}
+                            </div>
+
+                            <div className="mt-10 border-t border-white/10 pt-9">
+                                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                                    {about.stats.slice(0, 4).map((stat, index) => (
+                                        <div
+                                            key={`${stat.label}-${index}`}
+                                            className="group relative flex items-center gap-5 rounded-2xl border border-transparent px-2 py-3 transition-all duration-300 sm:px-0 xl:justify-center xl:border-r xl:border-white/10 xl:rounded-none xl:last:border-r-0"
+                                        >
+                                            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-red-500/20 bg-[linear-gradient(180deg,rgba(18,18,18,0.96)_0%,rgba(8,8,8,0.98)_100%)] text-red-500 shadow-[0_0_22px_rgba(220,38,38,0.10)] transition-all duration-300 group-hover:-translate-y-1 group-hover:border-red-400/40 group-hover:shadow-[0_0_28px_rgba(220,38,38,0.22)]">
+                                                {getStatIcon(index)}
+                                            </div>
+
+                                            <div className="min-w-0">
+                                                <div className="text-4xl font-black leading-none tracking-tight text-red-500 sm:text-5xl">
+                                                    {stat.number}
+                                                </div>
+                                                <div className="mt-2 text-sm font-medium text-white/70 sm:text-base">
+                                                    {stat.label}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                    ))}
-                </div>
-
-                {/* Lightbox tetap sama karena biasanya overlay full screen tidak masalah */}
-                {selectedImage && (
-                   <div
-                        className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-4"
-                        onClick={() => setSelectedImage(null)}
-                    >
-                         {/* Simplified Lightbox content for brevity - logic remains same as original */}
-                         <div className="relative w-full max-w-7xl mx-auto">
-                            <img
-                                src={selectedImage.src}
-                                className="w-full h-auto max-h-[80vh] object-contain mx-auto"
-                            />
-                            <button
-                                className="absolute top-[-40px] right-0 text-white p-2"
-                                onClick={() => setSelectedImage(null)}
-                            >Close</button>
-                         </div>
                     </div>
-                )}
+                </div>
             </div>
         </section>
     );

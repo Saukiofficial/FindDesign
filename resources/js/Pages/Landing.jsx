@@ -7,18 +7,27 @@ import Portfolio from './components/Portfolio.jsx';
 import Testimonials from './components/Testimonials.jsx';
 import Contact from './components/Contact.jsx';
 
-
-export default function Landing({ portfolioItems, featuredWorks }) {
+export default function Landing({
+    portfolioItems = [],
+    featuredWorks = [],
+    heroSetting = null,
+    aboutSetting = null,
+}) {
     return (
-        <AppLayout>
-            <Hero />
+        <AppLayout heroSetting={heroSetting}>
+            <Hero heroSetting={heroSetting} />
 
-            {/* 2. PENTING: Oper data ke komponen About di sini */}
-            <About featuredWorks={featuredWorks} />
+            <About
+                aboutSetting={aboutSetting}
+                featuredWorks={featuredWorks}
+            />
 
             <Services />
+
             <Portfolio portfolioItems={portfolioItems} />
+
             <Testimonials />
+
             <Contact />
         </AppLayout>
     );

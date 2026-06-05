@@ -1,146 +1,632 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-export default function Hero() {
-    const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
+export default function Hero({ heroSetting = null }) {
     const [isVisible, setIsVisible] = useState(false);
-    const requestRef = useRef();
+    const [isLightDevice, setIsLightDevice] = useState(false);
+    const [mousePosition, setMousePosition] = useState({ x: 65, y: 45 });
+    const requestRef = useRef(null);
 
     useEffect(() => {
         setIsVisible(true);
 
-        const handleMouseMove = (e) => {
+        const checkDevice = () => {
+            const isSmallScreen = window.innerWidth < 768;
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            const lowCpu = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+
+            setIsLightDevice(Boolean(isSmallScreen || isIOS || lowCpu));
+        };
+
+        checkDevice();
+        window.addEventListener('resize', checkDevice);
+
+        return () => {
+            window.removeEventListener('resize', checkDevice);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (isLightDevice) return;
+
+        const handleMouseMove = (event) => {
             if (requestRef.current) return;
 
             requestRef.current = requestAnimationFrame(() => {
                 setMousePosition({
-                    x: (e.clientX / window.innerWidth) * 100,
-                    y: (e.clientY / window.innerHeight) * 100
+                    x: (event.clientX / window.innerWidth) * 100,
+                    y: (event.clientY / window.innerHeight) * 100,
                 });
+
                 requestRef.current = null;
             });
         };
 
-        // Hanya jalankan listener mouse di layar besar (Desktop)
-        if (window.matchMedia("(min-width: 768px)").matches) {
-            window.addEventListener('mousemove', handleMouseMove);
-        }
+        window.addEventListener('mousemove', handleMouseMove);
 
         return () => {
-            if (window.matchMedia("(min-width: 768px)").matches) {
-                window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mousemove', handleMouseMove);
+
+            if (requestRef.current) {
+                cancelAnimationFrame(requestRef.current);
             }
-            if (requestRef.current) cancelAnimationFrame(requestRef.current);
         };
-    }, []);
+    }, [isLightDevice]);
+
+    const hero = useMemo(() => {
+        return {
+            welcomeText: heroSetting?.welcome_text || 'WELCOME TO',
+            subtitle: heroSetting?.subtitle || 'CREATIVE STUDIO & DIGITAL ART AGENCY',
+            description:
+                heroSetting?.description ||
+                'We craft bold visuals, powerful brands, and immersive digital art that leave a lasting impact.',
+            primaryButtonText: heroSetting?.primary_button_text || 'Explore Portfolio',
+            primaryButtonLink: heroSetting?.primary_button_link || '#portfolio',
+            secondaryButtonText: heroSetting?.secondary_button_text || 'Start Project',
+            secondaryButtonLink: heroSetting?.secondary_button_link || '#contact',
+
+            logoImage: heroSetting?.logo_image_url || '/images/logo-2.webp',
+            brandImage: heroSetting?.brand_image_url || null,
+            titleImage: heroSetting?.hero_title_image_url || null,
+
+            characterDesktop:
+                heroSetting?.hero_character_desktop_url ||
+                heroSetting?.hero_character_mobile_url ||
+                null,
+
+            characterMobile:
+                heroSetting?.hero_character_mobile_url ||
+                heroSetting?.hero_character_desktop_url ||
+                null,
+
+            backgroundImage: heroSetting?.hero_background_image_url || null,
+            signatureImage: heroSetting?.signature_image_url || null,
+
+            stats:
+                Array.isArray(heroSetting?.stats) && heroSetting.stats.length > 0
+                    ? heroSetting.stats
+                    : [
+                          {
+                              number: '200+',
+                              label: 'Projects Completed',
+                              icon: 'diamond',
+                          },
+                          {
+                              number: '50+',
+                              label: 'Happy Clients',
+                              icon: 'star',
+                          },
+                          {
+                              number: '8+',
+                              label: 'Years Experience',
+                              icon: 'bolt',
+                          },
+                      ],
+
+            serviceCards:
+                Array.isArray(heroSetting?.service_cards) && heroSetting.service_cards.length > 0
+                    ? heroSetting.service_cards
+                    : [
+                          {
+                              title: 'Illustration',
+                              subtitle: 'Custom Digital Art',
+                              icon: 'pen',
+                          },
+                          {
+                              title: 'Branding',
+                              subtitle: 'Identity & Logos',
+                              icon: 'vector',
+                          },
+                          {
+                              title: 'Graphic Design',
+                              subtitle: 'Print & Digital',
+                              icon: 'monitor',
+                          },
+                      ],
+
+            socialLinks:
+                Array.isArray(heroSetting?.social_links) && heroSetting.social_links.length > 0
+                    ? heroSetting.social_links
+                    : [
+                          {
+                              name: 'Behance',
+                              url: '#',
+                              icon: 'behance',
+                          },
+                          {
+                              name: 'Instagram',
+                              url: '#',
+                              icon: 'instagram',
+                          },
+                          {
+                              name: 'Dribbble',
+                              url: '#',
+                              icon: 'dribbble',
+                          },
+                          {
+                              name: 'Email',
+                              url: 'mailto:agusaffandi120@gmail.com',
+                              icon: 'mail',
+                          },
+                      ],
+        };
+    }, [heroSetting]);
+
+    const scrollToSection = (link) => {
+        if (!link) return;
+
+        if (link.startsWith('#')) {
+            const target = document.querySelector(link);
+
+            if (target) {
+                target.scrollIntoView({
+                    behavior: isLightDevice ? 'auto' : 'smooth',
+                    block: 'start',
+                });
+            }
+
+            return;
+        }
+
+        window.location.href = link;
+    };
+
+    const getStatIcon = (icon) => {
+        const className = 'h-8 w-8';
+
+        if (icon === 'star') {
+            return (
+                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.8"
+                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.958a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.367 2.446a1 1 0 00-.364 1.118l1.286 3.958c.3.921-.755 1.688-1.54 1.118l-3.367-2.446a1 1 0 00-1.175 0l-3.367 2.446c-.784.57-1.838-.197-1.539-1.118l1.286-3.958a1 1 0 00-.364-1.118L4.06 9.385c-.783-.57-.38-1.81.588-1.81H8.81a1 1 0 00.95-.69l1.286-3.958z"
+                    />
+                </svg>
+            );
+        }
+
+        if (icon === 'bolt') {
+            return (
+                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.8"
+                        d="M13 2L4 14h7l-1 8 10-13h-7l0-7z"
+                    />
+                </svg>
+            );
+        }
+
+        return (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.8"
+                    d="M6 3h12l4 6-10 12L2 9l4-6z"
+                />
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.8"
+                    d="M2 9h20M8 3l4 18M16 3l-4 18"
+                />
+            </svg>
+        );
+    };
+
+    const getServiceIcon = (icon) => {
+        const className = 'h-10 w-10';
+
+        if (icon === 'vector') {
+            return (
+                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.6"
+                        d="M4 17V7m16 10V7M7 4h10M7 20h10M7 4a3 3 0 110 6 3 3 0 010-6zm10 0a3 3 0 110 6 3 3 0 010-6zM7 14a3 3 0 110 6 3 3 0 010-6zm10 0a3 3 0 110 6 3 3 0 010-6z"
+                    />
+                </svg>
+            );
+        }
+
+        if (icon === 'monitor') {
+            return (
+                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.6"
+                        d="M4 5h16v11H4V5zM9 21h6M12 16v5"
+                    />
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.6"
+                        d="M8 10l3 3 5-6"
+                    />
+                </svg>
+            );
+        }
+
+        return (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.6"
+                    d="M12 3l3 5 5 2-5 2-3 9-3-9-5-2 5-2 3-5z"
+                />
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.6"
+                    d="M12 12l7 7M5 19l7-7"
+                />
+            </svg>
+        );
+    };
+
+    const getSocialIcon = (icon) => {
+        const className = 'h-5 w-5';
+
+        if (icon === 'instagram') {
+            return (
+                <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M7.8 2h8.4A5.8 5.8 0 0122 7.8v8.4a5.8 5.8 0 01-5.8 5.8H7.8A5.8 5.8 0 012 16.2V7.8A5.8 5.8 0 017.8 2zm0 2A3.8 3.8 0 004 7.8v8.4A3.8 3.8 0 007.8 20h8.4a3.8 3.8 0 003.8-3.8V7.8A3.8 3.8 0 0016.2 4H7.8zm8.7 1.75a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6z" />
+                </svg>
+            );
+        }
+
+        if (icon === 'dribbble') {
+            return (
+                <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2a10 10 0 1010 10A10.012 10.012 0 0012 2zm6.82 4.6a8.04 8.04 0 011.84 4.86 16.44 16.44 0 00-5.3-.24c-.22-.53-.45-1.05-.7-1.56a13.88 13.88 0 004.16-3.06zM12 3.94a8.03 8.03 0 015.55 2.23 11.74 11.74 0 01-3.74 2.74 36.12 36.12 0 00-2.64-4.85c.27-.08.55-.12.83-.12zm-2.95.7a33.86 33.86 0 012.71 4.9 29.5 29.5 0 01-7.43.97 8.08 8.08 0 014.72-5.87zM3.93 12v-.08a31.3 31.3 0 008.6-1.18c.18.38.35.76.51 1.15-.22.06-.43.13-.65.2a13.35 13.35 0 00-6.6 5.08A8.03 8.03 0 013.93 12zm8.07 8.07a8.02 8.02 0 01-4.8-1.6 11.4 11.4 0 016.55-4.95c.03-.01.07-.02.1-.03a28.35 28.35 0 011.47 5.88 7.94 7.94 0 01-3.32.7zm5.1-1.77a30.84 30.84 0 00-1.36-5.39 14.47 14.47 0 014.8.35 8.03 8.03 0 01-3.44 5.04z" />
+                </svg>
+            );
+        }
+
+        if (icon === 'mail') {
+            return (
+                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.8"
+                        d="M4 6h16v12H4V6zm0 0l8 7 8-7"
+                    />
+                </svg>
+            );
+        }
+
+        return (
+            <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+                <path d="M22 7.2c0 2.8-1.8 4.8-4.4 5.3 1.6.5 2.6 1.8 2.6 3.8 0 3.4-2.7 5.2-6.9 5.2H3V2.5h10.2C17.2 2.5 22 3.2 22 7.2zM8 6.6v4h4.6c1.8 0 3.6-.4 3.6-2.1 0-1.8-1.9-1.9-3.8-1.9H8zm0 7.7v4.1h5.2c2 0 3.4-.6 3.4-2.1 0-1.8-1.7-2-3.7-2H8z" />
+            </svg>
+        );
+    };
 
     return (
-        <section id="hero" className="relative h-screen flex items-center justify-center overflow-hidden bg-slate-900">
+        <section
+            id="home"
+            className="relative min-h-screen overflow-hidden bg-black text-white"
+        >
             <style>{`
-                /* OPTIMASI KHUSUS iOS/iPad - Anti Glitch */
-                @keyframes breathe {
+                @keyframes heroFloat {
                     0%, 100% {
                         transform: translate3d(0, 0, 0) scale(1);
-                        opacity: 1;
                     }
                     50% {
-                        transform: translate3d(0, 0, 0) scale(1.01);
-                        opacity: 0.96;
+                        transform: translate3d(0, -14px, 0) scale(1.015);
                     }
                 }
 
-                .hero-image-animated {
-                    animation: breathe 6s ease-in-out infinite;
-                    /* Force Hardware Acceleration - iOS Specific */
-                    transform: translate3d(0, 0, 0);
-                    -webkit-transform: translate3d(0, 0, 0);
-                    -webkit-backface-visibility: hidden;
-                    backface-visibility: hidden;
-                    -webkit-perspective: 1000px;
-                    perspective: 1000px;
-                    /* Hindari repainting */
-                    will-change: transform, opacity;
+                @keyframes heroGlow {
+                    0%, 100% {
+                        opacity: 0.55;
+                    }
+                    50% {
+                        opacity: 0.9;
+                    }
                 }
 
-                /* Disable animasi untuk perangkat dengan reduced motion */
-                @media (prefers-reduced-motion: reduce) {
-                    .hero-image-animated,
-                    .animate-bounce,
-                    .animate-pulse {
+                @keyframes heroLine {
+                    0% {
+                        transform: translateX(-100%);
+                    }
+                    100% {
+                        transform: translateX(100%);
+                    }
+                }
+
+                .hero-character-float {
+                    animation: heroFloat 7s ease-in-out infinite;
+                    transform: translate3d(0, 0, 0);
+                    backface-visibility: hidden;
+                }
+
+                .hero-soft-glow {
+                    animation: heroGlow 4s ease-in-out infinite;
+                }
+
+                .hero-shine::after {
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
+                    transform: translateX(-100%);
+                    animation: heroLine 4s ease-in-out infinite;
+                    pointer-events: none;
+                }
+
+                @media (max-width: 768px) {
+                    .hero-character-float,
+                    .hero-soft-glow,
+                    .hero-shine::after {
                         animation: none !important;
                     }
+
+                    .hero-mobile-hide {
+                        display: none !important;
+                    }
+
+                    .hero-mobile-no-blur {
+                        filter: none !important;
+                        -webkit-backdrop-filter: none !important;
+                        backdrop-filter: none !important;
+                    }
                 }
 
-                /* iOS Safari Smooth Scrolling Fix */
-                @supports (-webkit-overflow-scrolling: touch) {
-                    .hero-image-animated {
-                        -webkit-transform: translate3d(0, 0, 0);
+                @media (prefers-reduced-motion: reduce) {
+                    .hero-character-float,
+                    .hero-soft-glow,
+                    .hero-shine::after {
+                        animation: none !important;
                     }
                 }
             `}</style>
 
-            {/* Static Background Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-red-950/40 to-slate-950 z-0"></div>
-
-            {/* Floating Orbs - iOS Optimized (Tanpa Blur di Mobile) */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            {hero.backgroundImage && (
                 <div
-                    className="absolute w-64 h-64 md:w-96 md:h-96 rounded-full bg-red-600/12 md:bg-red-600/20 md:blur-3xl transition-transform duration-700 ease-out"
+                    className="absolute inset-0 z-0 bg-cover bg-center opacity-70"
                     style={{
-                        top: `${mousePosition.y}%`,
-                        left: `${mousePosition.x}%`,
-                        transform: 'translate3d(-50%, -50%, 0)',
-                        WebkitTransform: 'translate3d(-50%, -50%, 0)',
+                        backgroundImage: `url(${hero.backgroundImage})`,
                     }}
-                ></div>
+                />
+            )}
+
+            <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_70%_35%,rgba(220,38,38,0.32),transparent_34%),linear-gradient(120deg,#020202_0%,#050505_35%,#1b0303_70%,#020202_100%)]" />
+            <div className="absolute inset-0 z-0 bg-gradient-to-r from-black via-black/80 to-black/40" />
+
+            {!isLightDevice && (
+                <div
+                    className="hero-mobile-hide pointer-events-none absolute z-0 h-[520px] w-[520px] rounded-full bg-red-600/20 blur-3xl transition-transform duration-700"
+                    style={{
+                        left: `${mousePosition.x}%`,
+                        top: `${mousePosition.y}%`,
+                        transform: 'translate3d(-50%, -50%, 0)',
+                    }}
+                />
+            )}
+
+            <div className="hero-mobile-hide pointer-events-none absolute inset-0 z-0 opacity-[0.08]">
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(239,68,68,0.6)_1px,transparent_1px),linear-gradient(90deg,rgba(239,68,68,0.6)_1px,transparent_1px)] bg-[size:72px_72px]" />
             </div>
 
-            {/* Grid Pattern - Lebih Ringan */}
+            <div className="hero-mobile-hide absolute left-0 top-1/2 z-0 h-px w-full bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
+
             <div
-                className="absolute inset-0 opacity-5 md:opacity-10 z-0 pointer-events-none"
-                style={{
-                    backgroundImage: `linear-gradient(rgba(239, 68, 68, 0.1) 1px, transparent 1px),
-                                    linear-gradient(90deg, rgba(239, 68, 68, 0.1) 1px, transparent 1px)`,
-                    backgroundSize: '40px 40px',
-                    transform: 'translate3d(0, 0, 0)',
-                }}
-            ></div>
+                className={`relative z-10 mx-auto flex min-h-screen w-full max-w-[1600px] items-center px-5 pb-10 pt-24 transition-all duration-1000 sm:px-8 lg:px-12 xl:px-16 ${
+                    isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                }`}
+            >
+                <div className="grid w-full items-center gap-10 lg:grid-cols-[0.92fr_1.08fr]">
+                    <div className="relative z-20 max-w-3xl pt-10 lg:pt-20">
+                        <div className="mb-5 flex items-center gap-3">
+                            <span className="h-px w-10 bg-red-500" />
+                            <p className="text-xs font-bold uppercase tracking-[0.45em] text-red-500 sm:text-sm">
+                                {hero.welcomeText}
+                            </p>
+                        </div>
 
-            {/* Content */}
-            <div className={`relative z-10 text-center px-4 md:px-6 max-w-5xl transition-all duration-1000 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}>
-                {/* Image Container */}
-                <div className="mb-6 relative min-h-[300px] flex items-center justify-center">
-                    {/* Efek Glow - Tanpa Blur di Mobile */}
-                    <div className="absolute inset-0 bg-red-500/8 md:bg-red-500/20 md:blur-3xl rounded-full scale-75 md:scale-90 pointer-events-none"></div>
+                        {/* BAGIAN YANG SUDAH DIGESER KE KANAN */}
+                        <div className="relative mb-6">
+                            {hero.titleImage ? (
+                                <img
+                                    src={hero.titleImage}
+                                    alt="Fiind Design"
+                                    loading="eager"
+                                    decoding="async"
+                                    fetchPriority="high"
+                                    className="-ml-2 max-h-[220px] w-full max-w-[680px] object-contain object-left drop-shadow-[0_0_32px_rgba(220,38,38,0.38)] sm:-ml-1 sm:max-h-[300px] lg:-ml-4 lg:max-h-[360px] xl:-ml-20"
+                                    onError={(event) => {
+                                        event.currentTarget.style.display = 'none';
+                                    }}
+                                />
+                            ) : (
+                                <h1 className="text-6xl font-black uppercase leading-[0.9] tracking-tight sm:text-7xl lg:text-8xl">
+                                    <span className="block bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
+                                        Fiind
+                                    </span>
+                                    <span className="block bg-gradient-to-b from-red-500 to-red-800 bg-clip-text text-transparent">
+                                        Design
+                                    </span>
+                                </h1>
+                            )}
 
-                    <img
-                        src="/images/img-hero-2.webp"
-                        alt="Welcome to FindDesign"
-                        width="800"
-                        height="800"
-                        fetchPriority="high"
-                        loading="eager"
-                        className="hero-image-animated relative max-w-full h-auto mx-auto object-contain z-10 drop-shadow-2xl"
-                        style={{
-                            maxHeight: '60vh',
-                            transform: 'translate3d(0, 0, 0)',
-                            WebkitTransform: 'translate3d(0, 0, 0)',
-                        }}
-                    />
-                </div>
+                            {hero.signatureImage && (
+                                <img
+                                    src={hero.signatureImage}
+                                    alt="Signature"
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="hero-mobile-hide absolute right-4 top-8 max-h-24 max-w-[190px] opacity-50"
+                                    onError={(event) => {
+                                        event.currentTarget.style.display = 'none';
+                                    }}
+                                />
+                            )}
+                        </div>
 
-                {/* Badge - Tanpa Backdrop Blur di Mobile */}
-                <div className="inline-block mb-6 px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-full md:backdrop-blur-md">
-                    <span className="text-red-400 text-xs md:text-sm font-medium tracking-wider">ILLUSTRATION & DIGITAL ART</span>
+                        <div className="mb-5 flex items-center gap-3">
+                            <span className="h-8 w-1 rounded-full bg-red-600 shadow-[0_0_22px_rgba(220,38,38,0.9)]" />
+                            <h2 className="text-base font-extrabold uppercase tracking-[0.14em] text-white/90 sm:text-xl">
+                                {hero.subtitle}
+                            </h2>
+                        </div>
+
+                        <p className="mb-8 max-w-xl text-base leading-relaxed text-white/62 sm:text-lg">
+                            {hero.description}
+                        </p>
+
+                        <div className="mb-10 flex flex-col gap-4 sm:flex-row">
+                            <button
+                                type="button"
+                                onClick={() => scrollToSection(hero.primaryButtonLink)}
+                                className="hero-shine relative inline-flex items-center justify-center gap-4 overflow-hidden rounded-xl border border-red-400/60 bg-gradient-to-r from-red-600 to-red-500 px-8 py-4 text-sm font-extrabold text-white shadow-[0_0_32px_rgba(220,38,38,0.45)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_48px_rgba(220,38,38,0.65)] sm:text-base"
+                            >
+                                <span>{hero.primaryButtonText}</span>
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-6-6l6 6-6 6" />
+                                </svg>
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => scrollToSection(hero.secondaryButtonLink)}
+                                className="inline-flex items-center justify-center gap-4 rounded-xl border border-red-500/45 bg-white/[0.035] px-8 py-4 text-sm font-extrabold text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-red-400 hover:bg-red-500/10 sm:text-base"
+                            >
+                                <span>{hero.secondaryButtonText}</span>
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-6-6l6 6-6 6" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-3">
+                            {hero.stats.slice(0, 3).map((stat, index) => (
+                                <div
+                                    key={`${stat.label}-${index}`}
+                                    className="group flex items-center gap-4 border-red-500/20 sm:border-r sm:last:border-r-0"
+                                >
+                                    <div className="text-red-500 drop-shadow-[0_0_16px_rgba(239,68,68,0.65)] transition-transform duration-300 group-hover:scale-110">
+                                        {getStatIcon(stat.icon)}
+                                    </div>
+
+                                    <div>
+                                        <div className="text-2xl font-black text-white sm:text-3xl">
+                                            {stat.number}
+                                        </div>
+                                        <div className="text-xs text-white/55 sm:text-sm">
+                                            {stat.label}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="relative z-10 flex min-h-[470px] items-end justify-center lg:min-h-[720px]">
+                        <div className="hero-mobile-hide hero-soft-glow absolute right-[6%] top-[8%] h-[560px] w-[560px] rounded-full border border-red-500/25 shadow-[0_0_90px_rgba(220,38,38,0.24)]" />
+                        <div className="hero-mobile-hide absolute right-[15%] top-[16%] h-[410px] w-[410px] rounded-full border border-red-500/20" />
+
+                        {!isLightDevice && (
+                            <>
+                                <div className="hero-mobile-hide absolute right-[5%] top-[28%] h-28 w-2 rotate-45 bg-gradient-to-b from-red-400 to-transparent shadow-[0_0_24px_rgba(239,68,68,0.9)]" />
+                                <div className="hero-mobile-hide absolute left-[11%] top-[42%] h-36 w-3 -rotate-45 bg-gradient-to-b from-red-600 to-transparent shadow-[0_0_28px_rgba(239,68,68,0.8)]" />
+                                <div className="hero-mobile-hide absolute bottom-[22%] right-[10%] h-24 w-2 -rotate-12 bg-gradient-to-b from-red-500 to-transparent shadow-[0_0_20px_rgba(239,68,68,0.8)]" />
+                            </>
+                        )}
+
+                        <div className="hero-mobile-hide absolute bottom-12 right-[10%] h-[420px] w-[520px] rounded-full bg-red-600/25 blur-3xl" />
+
+                        {hero.characterDesktop && (
+                            <picture className="relative z-10 flex w-full justify-center">
+                                {hero.characterMobile && (
+                                    <source media="(max-width: 767px)" srcSet={hero.characterMobile} />
+                                )}
+
+                                <img
+                                    src={hero.characterDesktop}
+                                    alt="Fiind Design Character"
+                                    loading="eager"
+                                    decoding="async"
+                                    fetchPriority="high"
+                                    className={`hero-character-float max-h-[520px] w-full max-w-[720px] object-contain object-bottom drop-shadow-[0_0_38px_rgba(220,38,38,0.45)] lg:max-h-[760px] lg:max-w-[920px] ${
+                                        isLightDevice ? 'hero-mobile-no-blur' : ''
+                                    }`}
+                                    onError={(event) => {
+                                        event.currentTarget.style.display = 'none';
+                                    }}
+                                />
+                            </picture>
+                        )}
+
+                        <div className="absolute bottom-0 left-1/2 z-20 hidden w-full max-w-[760px] -translate-x-1/2 grid-cols-3 overflow-hidden rounded-2xl border border-red-500/25 bg-black/55 shadow-[0_0_45px_rgba(220,38,38,0.16)] backdrop-blur-md lg:grid">
+                            {hero.serviceCards.slice(0, 3).map((service, index) => (
+                                <div
+                                    key={`${service.title}-${index}`}
+                                    className="group relative flex items-center gap-5 border-r border-red-500/20 px-8 py-7 last:border-r-0 hover:bg-red-500/10"
+                                >
+                                    <div className="text-red-500 drop-shadow-[0_0_18px_rgba(239,68,68,0.75)] transition-transform duration-300 group-hover:scale-110">
+                                        {getServiceIcon(service.icon)}
+                                    </div>
+
+                                    <div>
+                                        <h3 className="font-extrabold text-white">
+                                            {service.title}
+                                        </h3>
+                                        <p className="mt-1 text-sm text-white/55">
+                                            {service.subtitle}
+                                        </p>
+                                    </div>
+
+                                    <div className="absolute bottom-0 left-1/2 h-1 w-14 -translate-x-1/2 rounded-t-full bg-red-500 shadow-[0_0_22px_rgba(239,68,68,0.95)]" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce z-20">
-                <div className="w-5 h-9 border-2 border-red-400/50 rounded-full flex items-start justify-center p-1.5">
-                    <div className="w-1 h-1.5 bg-red-400 rounded-full animate-pulse"></div>
-                </div>
+            <div className="hero-mobile-hide absolute right-7 top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-4 xl:flex">
+                {hero.socialLinks.slice(0, 4).map((social, index) => (
+                    <a
+                        key={`${social.name}-${index}`}
+                        href={social.url || '#'}
+                        target={social.url?.startsWith('http') ? '_blank' : undefined}
+                        rel={social.url?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        title={social.name}
+                        className="group flex h-12 w-12 items-center justify-center rounded-full border border-red-500/35 bg-black/50 text-white shadow-[0_0_24px_rgba(220,38,38,0.22)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-red-400 hover:bg-red-600 hover:shadow-[0_0_34px_rgba(220,38,38,0.5)]"
+                    >
+                        {getSocialIcon(social.icon)}
+                    </a>
+                ))}
+            </div>
+
+            <div className="relative z-20 mx-auto grid max-w-5xl grid-cols-1 gap-4 px-5 pb-10 sm:grid-cols-3 lg:hidden">
+                {hero.serviceCards.slice(0, 3).map((service, index) => (
+                    <div
+                        key={`${service.title}-mobile-${index}`}
+                        className="flex items-center gap-4 rounded-2xl border border-red-500/25 bg-slate-950/90 p-5"
+                    >
+                        <div className="text-red-500">
+                            {getServiceIcon(service.icon)}
+                        </div>
+
+                        <div>
+                            <h3 className="font-extrabold text-white">
+                                {service.title}
+                            </h3>
+                            <p className="text-sm text-white/55">
+                                {service.subtitle}
+                            </p>
+                        </div>
+                    </div>
+                ))}
             </div>
         </section>
     );
