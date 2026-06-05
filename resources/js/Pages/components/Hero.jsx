@@ -312,7 +312,7 @@ export default function Hero({ heroSetting = null }) {
     return (
         <section
             id="home"
-            className="relative min-h-screen overflow-hidden bg-black text-white"
+            className="relative min-h-0 overflow-hidden bg-black text-white sm:min-h-screen"
         >
             <style>{`
                 @keyframes heroFloat {
@@ -362,7 +362,7 @@ export default function Hero({ heroSetting = null }) {
                     pointer-events: none;
                 }
 
-                @media (max-width: 768px) {
+                @media (max-width: 479px) {
                     .hero-character-float,
                     .hero-soft-glow,
                     .hero-shine::after {
@@ -377,6 +377,12 @@ export default function Hero({ heroSetting = null }) {
                         filter: none !important;
                         -webkit-backdrop-filter: none !important;
                         backdrop-filter: none !important;
+                    }
+                }
+
+                @media (min-width: 480px) and (max-width: 768px) {
+                    .hero-mobile-hide {
+                        display: none !important;
                     }
                 }
 
@@ -419,35 +425,34 @@ export default function Hero({ heroSetting = null }) {
             <div className="hero-mobile-hide absolute left-0 top-1/2 z-0 h-px w-full bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
 
             <div
-                className={`relative z-10 mx-auto flex min-h-screen w-full max-w-[1600px] items-center px-5 pb-10 pt-24 transition-all duration-1000 sm:px-8 lg:px-12 xl:px-16 ${
+                className={`relative z-10 mx-auto flex w-full max-w-[1600px] items-center px-3 pb-4 pt-14 transition-all duration-1000 sm:min-h-screen sm:px-8 sm:pb-10 sm:pt-20 lg:px-12 xl:px-16 ${
                     isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                 }`}
             >
-                <div className="grid w-full items-center gap-10 lg:grid-cols-[0.92fr_1.08fr]">
-                    <div className="relative z-20 max-w-3xl pt-10 lg:pt-20">
-                        <div className="mb-5 flex items-center gap-3">
-                            <span className="h-px w-10 bg-red-500" />
-                            <p className="text-xs font-bold uppercase tracking-[0.45em] text-red-500 sm:text-sm">
+                <div className="grid w-full grid-cols-2 items-end gap-2 sm:items-center sm:gap-6 lg:gap-10 lg:grid-cols-[0.92fr_1.08fr]">
+                    <div className="relative z-20 max-w-3xl pt-2 lg:pt-20">
+                        <div className="mb-2 flex items-center gap-1.5 sm:mb-5 sm:gap-3">
+                            <span className="h-px w-5 bg-red-500 sm:w-10" />
+                            <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-red-500 sm:text-xs sm:tracking-[0.45em] lg:text-sm">
                                 {hero.welcomeText}
                             </p>
                         </div>
 
-                        {/* BAGIAN YANG SUDAH DIGESER KE KANAN */}
-                        <div className="relative mb-6">
+                        <div className="relative mb-3 sm:mb-6">
                             {hero.titleImage ? (
                                 <img
                                     src={hero.titleImage}
-                                    alt="Fiind Design"
+                                    alt="Find Design"
                                     loading="eager"
                                     decoding="async"
                                     fetchPriority="high"
-                                    className="-ml-2 max-h-[220px] w-full max-w-[680px] object-contain object-left drop-shadow-[0_0_32px_rgba(220,38,38,0.38)] sm:-ml-1 sm:max-h-[300px] lg:-ml-4 lg:max-h-[360px] xl:-ml-20"
+                                    className="max-h-[80px] w-full max-w-full object-contain object-left drop-shadow-[0_0_32px_rgba(220,38,38,0.38)] sm:max-h-[200px] sm:-ml-1 sm:max-w-[680px] lg:-ml-4 lg:max-h-[360px] xl:-ml-20"
                                     onError={(event) => {
                                         event.currentTarget.style.display = 'none';
                                     }}
                                 />
                             ) : (
-                                <h1 className="text-6xl font-black uppercase leading-[0.9] tracking-tight sm:text-7xl lg:text-8xl">
+                                <h1 className="text-3xl font-black uppercase leading-[0.9] tracking-tight sm:text-5xl lg:text-7xl xl:text-8xl">
                                     <span className="block bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
                                         Fiind
                                     </span>
@@ -471,25 +476,25 @@ export default function Hero({ heroSetting = null }) {
                             )}
                         </div>
 
-                        <div className="mb-5 flex items-center gap-3">
-                            <span className="h-8 w-1 rounded-full bg-red-600 shadow-[0_0_22px_rgba(220,38,38,0.9)]" />
-                            <h2 className="text-base font-extrabold uppercase tracking-[0.14em] text-white/90 sm:text-xl">
+                        <div className="mb-2 flex items-center gap-2 sm:mb-5 sm:gap-3">
+                            <span className="h-5 w-0.5 rounded-full bg-red-600 shadow-[0_0_22px_rgba(220,38,38,0.9)] sm:h-8 sm:w-1" />
+                            <h2 className="text-[8px] font-extrabold uppercase tracking-[0.1em] text-white/90 sm:text-sm sm:tracking-[0.14em] lg:text-xl">
                                 {hero.subtitle}
                             </h2>
                         </div>
 
-                        <p className="mb-8 max-w-xl text-base leading-relaxed text-white/62 sm:text-lg">
+                        <p className="mb-4 max-w-xl text-[9px] leading-relaxed text-white/62 sm:mb-8 sm:text-base lg:text-lg">
                             {hero.description}
                         </p>
 
-                        <div className="mb-10 flex flex-col gap-4 sm:flex-row">
+                        <div className="mb-4 flex flex-col gap-2 sm:mb-10 sm:flex-row sm:gap-4">
                             <button
                                 type="button"
                                 onClick={() => scrollToSection(hero.primaryButtonLink)}
-                                className="hero-shine relative inline-flex items-center justify-center gap-4 overflow-hidden rounded-xl border border-red-400/60 bg-gradient-to-r from-red-600 to-red-500 px-8 py-4 text-sm font-extrabold text-white shadow-[0_0_32px_rgba(220,38,38,0.45)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_48px_rgba(220,38,38,0.65)] sm:text-base"
+                                className="hero-shine relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg border border-red-400/60 bg-gradient-to-r from-red-600 to-red-500 px-4 py-2.5 text-[10px] font-extrabold text-white shadow-[0_0_32px_rgba(220,38,38,0.45)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_48px_rgba(220,38,38,0.65)] sm:gap-4 sm:rounded-xl sm:px-8 sm:py-4 sm:text-sm lg:text-base"
                             >
                                 <span>{hero.primaryButtonText}</span>
-                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="h-3 w-3 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-6-6l6 6-6 6" />
                                 </svg>
                             </button>
@@ -497,30 +502,33 @@ export default function Hero({ heroSetting = null }) {
                             <button
                                 type="button"
                                 onClick={() => scrollToSection(hero.secondaryButtonLink)}
-                                className="inline-flex items-center justify-center gap-4 rounded-xl border border-red-500/45 bg-white/[0.035] px-8 py-4 text-sm font-extrabold text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-red-400 hover:bg-red-500/10 sm:text-base"
+                                className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-500/45 bg-white/[0.035] px-4 py-2.5 text-[10px] font-extrabold text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-red-400 hover:bg-red-500/10 sm:gap-4 sm:rounded-xl sm:px-8 sm:py-4 sm:text-sm lg:text-base"
                             >
                                 <span>{hero.secondaryButtonText}</span>
-                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="h-3 w-3 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-6-6l6 6-6 6" />
                                 </svg>
                             </button>
                         </div>
 
-                        <div className="grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-3">
+                        <div className="grid max-w-2xl grid-cols-3 gap-1 sm:gap-4">
                             {hero.stats.slice(0, 3).map((stat, index) => (
                                 <div
                                     key={`${stat.label}-${index}`}
-                                    className="group flex items-center gap-4 border-red-500/20 sm:border-r sm:last:border-r-0"
+                                    className="group flex items-center gap-1.5 border-red-500/20 sm:gap-4 sm:border-r sm:last:border-r-0"
                                 >
-                                    <div className="text-red-500 drop-shadow-[0_0_16px_rgba(239,68,68,0.65)] transition-transform duration-300 group-hover:scale-110">
+                                    <div className="hidden text-red-500 drop-shadow-[0_0_16px_rgba(239,68,68,0.65)] transition-transform duration-300 group-hover:scale-110 sm:block">
                                         {getStatIcon(stat.icon)}
+                                    </div>
+                                    <div className="text-red-500 drop-shadow-[0_0_16px_rgba(239,68,68,0.65)] sm:hidden">
+                                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M6 3h12l4 6-10 12L2 9l4-6z"/></svg>
                                     </div>
 
                                     <div>
-                                        <div className="text-2xl font-black text-white sm:text-3xl">
+                                        <div className="text-base font-black text-white sm:text-2xl lg:text-3xl">
                                             {stat.number}
                                         </div>
-                                        <div className="text-xs text-white/55 sm:text-sm">
+                                        <div className="text-[7px] text-white/55 sm:text-xs lg:text-sm">
                                             {stat.label}
                                         </div>
                                     </div>
@@ -529,7 +537,7 @@ export default function Hero({ heroSetting = null }) {
                         </div>
                     </div>
 
-                    <div className="relative z-10 flex min-h-[470px] items-end justify-center lg:min-h-[720px]">
+                    <div className="relative z-10 flex items-end justify-center sm:min-h-[470px] lg:min-h-[720px]">
                         <div className="hero-mobile-hide hero-soft-glow absolute right-[6%] top-[8%] h-[560px] w-[560px] rounded-full border border-red-500/25 shadow-[0_0_90px_rgba(220,38,38,0.24)]" />
                         <div className="hero-mobile-hide absolute right-[15%] top-[16%] h-[410px] w-[410px] rounded-full border border-red-500/20" />
 
@@ -555,7 +563,7 @@ export default function Hero({ heroSetting = null }) {
                                     loading="eager"
                                     decoding="async"
                                     fetchPriority="high"
-                                    className={`hero-character-float max-h-[520px] w-full max-w-[720px] object-contain object-bottom drop-shadow-[0_0_38px_rgba(220,38,38,0.45)] lg:max-h-[760px] lg:max-w-[920px] ${
+                                    className={`hero-character-float w-full max-h-[160px] max-w-full object-contain object-bottom drop-shadow-[0_0_38px_rgba(220,38,38,0.45)] sm:max-h-[520px] sm:max-w-[720px] lg:max-h-[760px] lg:max-w-[920px] ${
                                         isLightDevice ? 'hero-mobile-no-blur' : ''
                                     }`}
                                     onError={(event) => {
@@ -607,7 +615,7 @@ export default function Hero({ heroSetting = null }) {
                 ))}
             </div>
 
-            <div className="relative z-20 mx-auto grid max-w-5xl grid-cols-1 gap-4 px-5 pb-10 sm:grid-cols-3 lg:hidden">
+            <div className="relative z-20 mx-auto hidden grid-cols-1 gap-4 px-5 pb-10 sm:grid sm:grid-cols-3 lg:hidden max-w-5xl">
                 {hero.serviceCards.slice(0, 3).map((service, index) => (
                     <div
                         key={`${service.title}-mobile-${index}`}

@@ -9,7 +9,7 @@ export default function AppLayout({ title, children, heroSetting = null }) {
         return {
             logoImage: heroSetting?.logo_image_url || '/images/logo-2.webp',
             brandImage: heroSetting?.brand_image_url || null,
-            name: 'FiindDesign',
+            name: 'FindDesign',
             subtitle: 'Creative Studio',
         };
     }, [heroSetting]);
@@ -172,7 +172,7 @@ export default function AppLayout({ title, children, heroSetting = null }) {
                             {brand.brandImage ? (
                                 <img
                                     src={brand.brandImage}
-                                    alt="Fiind Design"
+                                    alt="Find Design"
                                     loading="eager"
                                     decoding="async"
                                     className="max-h-[42px] max-w-[250px] object-contain object-left"
@@ -415,7 +415,7 @@ export default function AppLayout({ title, children, heroSetting = null }) {
 
                     <div className="border-t border-slate-800 pt-8 text-center">
                         <p className="text-sm text-white/60">
-                            &copy; {new Date().getFullYear()} FiindDesign. All rights reserved.
+                            &copy; {new Date().getFullYear()} FindDesign. All rights reserved.
                         </p>
                     </div>
                 </div>
