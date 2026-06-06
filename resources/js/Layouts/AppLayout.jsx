@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-export default function AppLayout({ title, children, heroSetting = null }) {
+export default function AppLayout({ children, heroSetting = null }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('home');
     const [scrolled, setScrolled] = useState(false);
@@ -9,7 +9,7 @@ export default function AppLayout({ title, children, heroSetting = null }) {
         return {
             logoImage: heroSetting?.logo_image_url || '/images/logo-2.webp',
             brandImage: heroSetting?.brand_image_url || null,
-            name: 'FindDesign',
+            name: 'FiindDesign',
             subtitle: 'Creative Studio',
         };
     }, [heroSetting]);
@@ -84,7 +84,7 @@ export default function AppLayout({ title, children, heroSetting = null }) {
                 @keyframes navEntrance {
                     from {
                         opacity: 0;
-                        transform: translate3d(0, -22px, 0);
+                        transform: translate3d(0, -18px, 0);
                     }
                     to {
                         opacity: 1;
@@ -96,12 +96,12 @@ export default function AppLayout({ title, children, heroSetting = null }) {
                     0%, 100% {
                         box-shadow:
                             0 0 0 1px rgba(239, 68, 68, 0.22),
-                            0 18px 70px rgba(220, 38, 38, 0.14);
+                            0 18px 55px rgba(220, 38, 38, 0.14);
                     }
                     50% {
                         box-shadow:
-                            0 0 0 1px rgba(239, 68, 68, 0.38),
-                            0 20px 90px rgba(220, 38, 38, 0.22);
+                            0 0 0 1px rgba(239, 68, 68, 0.36),
+                            0 22px 74px rgba(220, 38, 38, 0.22);
                     }
                 }
 
@@ -117,16 +117,22 @@ export default function AppLayout({ title, children, heroSetting = null }) {
                 }
 
                 .fd-navbar {
-                    animation: navEntrance 0.7s ease-out both, navGlow 5s ease-in-out infinite;
+                    animation: navEntrance 0.55s ease-out both, navGlow 5s ease-in-out infinite;
                 }
 
                 .fd-active-dot {
                     animation: navDotPulse 1.8s ease-in-out infinite;
                 }
 
-                @media (max-width: 768px) {
+                @supports (padding-top: env(safe-area-inset-top)) {
+                    .fd-mobile-header {
+                        padding-top: max(18px, env(safe-area-inset-top));
+                    }
+                }
+
+                @media (max-width: 640px) {
                     .fd-navbar {
-                        animation: navEntrance 0.45s ease-out both !important;
+                        animation: navEntrance 0.4s ease-out both !important;
                     }
                 }
 
@@ -139,59 +145,63 @@ export default function AppLayout({ title, children, heroSetting = null }) {
             `}</style>
 
             {/* NAVBAR */}
-            <header className="fixed left-0 right-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8 lg:pt-7">
+            <header className="fd-mobile-header fixed left-0 right-0 top-0 z-50 px-4 pt-[18px] sm:px-6 sm:pt-4 lg:px-8 lg:pt-7">
                 <nav
-                    className={`fd-navbar mx-auto flex max-w-[1780px] items-center justify-between rounded-[1.6rem] border px-5 py-4 transition-all duration-500 sm:px-7 lg:px-10 ${
+                    className={`fd-navbar mx-auto flex max-w-[1780px] items-center justify-between border transition-all duration-500
+                    rounded-[28px] px-4 py-4
+                    sm:rounded-[1.6rem] sm:px-7 sm:py-4
+                    lg:px-10
+                    ${
                         scrolled
-                            ? 'border-red-500/25 bg-black/82 shadow-[0_18px_70px_rgba(220,38,38,0.18)] backdrop-blur-xl'
-                            : 'border-red-500/20 bg-black/58 shadow-[0_18px_70px_rgba(220,38,38,0.14)] backdrop-blur-xl'
+                            ? 'border-red-500/25 bg-black/88 shadow-[0_18px_70px_rgba(220,38,38,0.18)] backdrop-blur-xl'
+                            : 'border-red-500/20 bg-black/68 shadow-[0_18px_70px_rgba(220,38,38,0.14)] backdrop-blur-xl'
                     }`}
                 >
                     {/* LEFT BRAND */}
                     <a
                         href="#home"
                         onClick={(event) => handleNavClick(event, '#home', 'home')}
-                        className="group flex min-w-0 items-center gap-4"
+                        className="group flex min-w-0 items-center gap-3 sm:gap-4"
                     >
-                        <div className="relative flex h-[64px] w-[64px] shrink-0 items-center justify-center rounded-full border border-red-500/35 bg-black/60 shadow-[0_0_30px_rgba(220,38,38,0.24)] sm:h-[74px] sm:w-[74px]">
-                            <div className="absolute inset-1 rounded-full bg-gradient-to-br from-red-500/20 via-transparent to-orange-500/10" />
+                        <div className="relative flex h-[clamp(58px,16vw,72px)] w-[clamp(58px,16vw,72px)] shrink-0 items-center justify-center rounded-full border border-red-500/35 bg-black/70 shadow-[0_0_32px_rgba(220,38,38,0.28)] sm:h-[74px] sm:w-[74px]">
+                            <div className="absolute inset-1 rounded-full bg-gradient-to-br from-red-500/25 via-transparent to-orange-500/10" />
 
                             <img
                                 src={brand.logoImage}
                                 alt="Fiind Design Logo"
                                 loading="eager"
                                 decoding="async"
-                                className="relative z-10 h-[52px] w-[52px] rounded-full object-contain transition-transform duration-300 group-hover:scale-105 sm:h-[60px] sm:w-[60px]"
+                                className="relative z-10 h-[86%] w-[86%] rounded-full object-contain transition-transform duration-300 group-hover:scale-105 sm:h-[60px] sm:w-[60px]"
                                 onError={(event) => {
                                     event.currentTarget.style.display = 'none';
                                 }}
                             />
                         </div>
 
-                        <div className="hidden min-w-0 sm:block">
+                        <div className="min-w-0">
                             {brand.brandImage ? (
                                 <img
                                     src={brand.brandImage}
-                                    alt="Find Design"
+                                    alt="Fiind Design"
                                     loading="eager"
                                     decoding="async"
-                                    className="max-h-[42px] max-w-[250px] object-contain object-left"
+                                    className="max-h-[clamp(36px,9vw,48px)] max-w-[clamp(160px,48vw,240px)] object-contain object-left sm:max-h-[42px] sm:max-w-[250px]"
                                     onError={(event) => {
                                         event.currentTarget.style.display = 'none';
                                     }}
                                 />
                             ) : (
                                 <>
-                                    <div className="flex items-center text-[1.65rem] font-black leading-none tracking-tight lg:text-[2rem]">
-                                        <span className="text-white drop-shadow-[0_0_16px_rgba(255,255,255,0.16)]">
+                                    <div className="flex items-center text-[clamp(1.35rem,6vw,1.95rem)] font-black leading-none tracking-tight sm:text-[1.65rem] lg:text-[2rem]">
+                                        <span className="text-white drop-shadow-[0_0_18px_rgba(255,255,255,0.18)]">
                                             Fiind
                                         </span>
-                                        <span className="ml-1 bg-gradient-to-b from-red-400 to-red-700 bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(220,38,38,0.45)]">
+                                        <span className="ml-1 bg-gradient-to-b from-red-400 to-red-700 bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(220,38,38,0.48)]">
                                             Design
                                         </span>
                                     </div>
 
-                                    <p className="mt-1 text-[0.62rem] font-bold uppercase tracking-[0.44em] text-white/55">
+                                    <p className="mt-1 text-[clamp(0.52rem,2.6vw,0.75rem)] font-bold uppercase tracking-[0.38em] text-white/55 sm:text-[0.62rem]">
                                         {brand.subtitle}
                                     </p>
                                 </>
@@ -255,23 +265,23 @@ export default function AppLayout({ title, children, heroSetting = null }) {
                     <button
                         type="button"
                         onClick={() => setMenuOpen((value) => !value)}
-                        className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-red-500/30 bg-red-500/10 text-white shadow-[0_0_22px_rgba(220,38,38,0.16)] transition hover:bg-red-500/20 lg:hidden"
+                        className="relative flex h-[clamp(58px,16vw,70px)] w-[clamp(58px,16vw,70px)] shrink-0 items-center justify-center rounded-[22px] border border-red-500/50 bg-black/55 text-white shadow-[0_0_28px_rgba(220,38,38,0.28)] transition hover:bg-red-500/10 sm:h-12 sm:w-12 sm:rounded-xl lg:hidden"
                         aria-label="Toggle menu"
                     >
-                        <div className="flex h-5 w-6 flex-col justify-between">
+                        <div className="flex h-6 w-8 flex-col justify-between sm:h-5 sm:w-6">
                             <span
-                                className={`h-0.5 w-full rounded-full bg-red-400 transition-all duration-300 ${
-                                    menuOpen ? 'translate-y-2 rotate-45' : ''
+                                className={`h-[3px] w-full rounded-full bg-white transition-all duration-300 sm:h-0.5 sm:bg-red-400 ${
+                                    menuOpen ? 'translate-y-[10px] rotate-45 sm:translate-y-2' : ''
                                 }`}
                             />
                             <span
-                                className={`h-0.5 w-full rounded-full bg-red-400 transition-all duration-300 ${
+                                className={`h-[3px] w-full rounded-full bg-white transition-all duration-300 sm:h-0.5 sm:bg-red-400 ${
                                     menuOpen ? 'opacity-0' : ''
                                 }`}
                             />
                             <span
-                                className={`h-0.5 w-full rounded-full bg-red-400 transition-all duration-300 ${
-                                    menuOpen ? '-translate-y-2 -rotate-45' : ''
+                                className={`h-[3px] w-full rounded-full bg-white transition-all duration-300 sm:h-0.5 sm:bg-red-400 ${
+                                    menuOpen ? '-translate-y-[10px] -rotate-45 sm:-translate-y-2' : ''
                                 }`}
                             />
                         </div>
@@ -280,7 +290,7 @@ export default function AppLayout({ title, children, heroSetting = null }) {
 
                 {/* MOBILE MENU */}
                 <div
-                    className={`mx-auto mt-3 max-w-[1780px] overflow-hidden rounded-2xl border border-red-500/20 bg-black/90 shadow-[0_20px_70px_rgba(220,38,38,0.18)] backdrop-blur-xl transition-all duration-500 lg:hidden ${
+                    className={`mx-auto mt-3 max-w-[1780px] overflow-hidden rounded-[1.7rem] border border-red-500/20 bg-black/94 shadow-[0_20px_70px_rgba(220,38,38,0.18)] backdrop-blur-xl transition-all duration-500 lg:hidden ${
                         menuOpen ? 'max-h-[560px] opacity-100' : 'max-h-0 border-transparent opacity-0'
                     }`}
                 >
@@ -351,71 +361,13 @@ export default function AppLayout({ title, children, heroSetting = null }) {
                 </a>
             </div>
 
-            {/* MAIN CONTENT */}
             <main>{children}</main>
 
-            {/* FOOTER */}
             <footer className="relative overflow-hidden bg-gradient-to-t from-slate-950 to-red-950/30 py-12">
-                <div className="absolute inset-0 opacity-20">
-                    <div className="absolute left-1/4 top-0 h-64 w-64 rounded-full bg-red-600 blur-3xl" />
-                    <div className="absolute bottom-0 right-1/4 h-64 w-64 rounded-full bg-red-500 blur-3xl" />
-                </div>
-
                 <div className="container relative mx-auto px-6">
-                    <div className="mb-8 grid gap-8 md:grid-cols-4">
-                        <div className="md:col-span-2">
-                            <h3 className="mb-4 text-3xl font-black">
-                                <span className="text-white">Fiind</span>
-                                <span className="text-red-500">Design</span>
-                            </h3>
-                            <p className="max-w-md text-white/70">
-                                Creating stunning illustrations and digital art that bring your vision to life.
-                                We transform ideas into visual masterpieces.
-                            </p>
-                        </div>
-
-                        <div>
-                            <h4 className="mb-4 text-lg font-semibold text-red-400">
-                                Quick Links
-                            </h4>
-                            <div className="space-y-2">
-                                {navItems.slice(1).map((link) => (
-                                    <a
-                                        key={link.id}
-                                        href={link.href}
-                                        onClick={(event) => handleNavClick(event, link.href, link.id)}
-                                        className="block text-white/70 transition-all duration-300 hover:translate-x-1 hover:text-red-400"
-                                    >
-                                        {link.label}
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 className="mb-4 text-lg font-semibold text-red-400">
-                                Follow Us
-                            </h4>
-                            <div className="flex space-x-4">
-                                {['Instagram', 'Twitter', 'Behance'].map((social) => (
-                                    <a
-                                        key={social}
-                                        href="#"
-                                        className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 transition-all duration-300 hover:scale-110 hover:bg-gradient-to-r hover:from-red-600 hover:to-red-500"
-                                        title={social}
-                                    >
-                                        <span className="text-xs text-white">
-                                            {social[0]}
-                                        </span>
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
                     <div className="border-t border-slate-800 pt-8 text-center">
                         <p className="text-sm text-white/60">
-                            &copy; {new Date().getFullYear()} FindDesign. All rights reserved.
+                            &copy; {new Date().getFullYear()} FiindDesign. All rights reserved.
                         </p>
                     </div>
                 </div>

@@ -64,8 +64,6 @@ export default function Hero({ heroSetting = null }) {
             secondaryButtonText: heroSetting?.secondary_button_text || 'Start Project',
             secondaryButtonLink: heroSetting?.secondary_button_link || '#contact',
 
-            logoImage: heroSetting?.logo_image_url || '/images/logo-2.webp',
-            brandImage: heroSetting?.brand_image_url || null,
             titleImage: heroSetting?.hero_title_image_url || null,
 
             characterDesktop:
@@ -85,68 +83,28 @@ export default function Hero({ heroSetting = null }) {
                 Array.isArray(heroSetting?.stats) && heroSetting.stats.length > 0
                     ? heroSetting.stats
                     : [
-                          {
-                              number: '200+',
-                              label: 'Projects Completed',
-                              icon: 'diamond',
-                          },
-                          {
-                              number: '50+',
-                              label: 'Happy Clients',
-                              icon: 'star',
-                          },
-                          {
-                              number: '8+',
-                              label: 'Years Experience',
-                              icon: 'bolt',
-                          },
+                          { number: '200+', label: 'Projects Completed', icon: 'diamond' },
+                          { number: '50+', label: 'Happy Clients', icon: 'star' },
+                          { number: '8+', label: 'Years Experience', icon: 'bolt' },
                       ],
 
             serviceCards:
                 Array.isArray(heroSetting?.service_cards) && heroSetting.service_cards.length > 0
                     ? heroSetting.service_cards
                     : [
-                          {
-                              title: 'Illustration',
-                              subtitle: 'Custom Digital Art',
-                              icon: 'pen',
-                          },
-                          {
-                              title: 'Branding',
-                              subtitle: 'Identity & Logos',
-                              icon: 'vector',
-                          },
-                          {
-                              title: 'Graphic Design',
-                              subtitle: 'Print & Digital',
-                              icon: 'monitor',
-                          },
+                          { title: 'Illustration', subtitle: 'Custom Digital Art', icon: 'pen' },
+                          { title: 'Branding', subtitle: 'Identity & Logos', icon: 'vector' },
+                          { title: 'Graphic Design', subtitle: 'Print & Digital', icon: 'monitor' },
                       ],
 
             socialLinks:
-                Array.isArray(heroSetting?.social_links) && heroSetting.social_links.length > 0
+                Array.isArray(heroSetting?.social_links) && heroSetting?.social_links.length > 0
                     ? heroSetting.social_links
                     : [
-                          {
-                              name: 'Behance',
-                              url: '#',
-                              icon: 'behance',
-                          },
-                          {
-                              name: 'Instagram',
-                              url: '#',
-                              icon: 'instagram',
-                          },
-                          {
-                              name: 'Dribbble',
-                              url: '#',
-                              icon: 'dribbble',
-                          },
-                          {
-                              name: 'Email',
-                              url: 'mailto:agusaffandi120@gmail.com',
-                              icon: 'mail',
-                          },
+                          { name: 'Behance', url: '#', icon: 'behance' },
+                          { name: 'Instagram', url: '#', icon: 'instagram' },
+                          { name: 'Dribbble', url: '#', icon: 'dribbble' },
+                          { name: 'Email', url: 'mailto:agusaffandi120@gmail.com', icon: 'mail' },
                       ],
         };
     }, [heroSetting]);
@@ -310,10 +268,7 @@ export default function Hero({ heroSetting = null }) {
     };
 
     return (
-        <section
-            id="home"
-            className="relative min-h-0 overflow-hidden bg-black text-white sm:min-h-screen"
-        >
+        <section id="home" className="fd-hero-section relative min-h-0 overflow-hidden bg-black text-white sm:min-h-screen">
             <style>{`
                 @keyframes heroFloat {
                     0%, 100% {
@@ -362,6 +317,283 @@ export default function Hero({ heroSetting = null }) {
                     pointer-events: none;
                 }
 
+                .fd-mobile-stage {
+                    height: clamp(246px, 62vw, 292px);
+                }
+
+                .fd-mobile-title {
+                    width: clamp(178px, 49vw, 232px);
+                }
+
+                .fd-mobile-character {
+                    width: clamp(245px, 68vw, 318px);
+                    right: clamp(-82px, -18vw, -52px);
+                    top: clamp(96px, 24vw, 122px);
+                }
+
+                .fd-mobile-content {
+                    margin-top: clamp(-42px, -9vw, -26px);
+                }
+
+                .fd-mobile-text-area {
+                    max-width: 55%;
+                    padding-top: 0;
+                }
+
+                .fd-mobile-subtitle {
+                    font-size: clamp(0.58rem, 2.45vw, 0.74rem);
+                    line-height: 1.22;
+                    letter-spacing: 0.03em;
+                }
+
+                .fd-mobile-description {
+                    font-size: clamp(0.5rem, 2.12vw, 0.64rem);
+                    line-height: 1.55;
+                }
+
+                .fd-mobile-actions {
+                    width: clamp(148px, 42vw, 190px);
+                    max-width: 52%;
+                }
+
+                .fd-mobile-button {
+                    min-height: clamp(28px, 6.8vw, 34px);
+                    padding-inline: clamp(9px, 2.7vw, 13px);
+                    padding-block: clamp(5px, 1.55vw, 7px);
+                    border-radius: clamp(8px, 2.4vw, 11px);
+                    font-size: clamp(0.5rem, 2.1vw, 0.62rem);
+                }
+
+                .fd-mobile-stat-card {
+                    min-height: clamp(64px, 17vw, 82px);
+                    border-radius: clamp(9px, 2.8vw, 13px);
+                }
+
+                .fd-mobile-stat-icon svg {
+                    height: clamp(14px, 4vw, 19px);
+                    width: clamp(14px, 4vw, 19px);
+                }
+
+                .fd-mobile-stat-number {
+                    font-size: clamp(0.9rem, 4.4vw, 1.16rem);
+                }
+
+                .fd-mobile-stat-label {
+                    font-size: clamp(0.36rem, 1.65vw, 0.48rem);
+                    line-height: 1.12;
+                }
+
+                .fd-mobile-service-title {
+                    font-size: clamp(1.05rem, 4.8vw, 1.35rem);
+                }
+
+                .fd-mobile-service-desc {
+                    font-size: clamp(0.52rem, 2.3vw, 0.66rem);
+                }
+
+                .fd-mobile-service-card {
+                    min-height: clamp(72px, 20vw, 96px);
+                    border-radius: clamp(9px, 2.8vw, 13px);
+                }
+
+                .fd-mobile-service-icon svg {
+                    height: clamp(18px, 5.2vw, 26px);
+                    width: clamp(18px, 5.2vw, 26px);
+                }
+
+                .fd-mobile-service-card-title {
+                    font-size: clamp(0.46rem, 2.15vw, 0.62rem);
+                }
+
+                .fd-mobile-service-card-desc {
+                    font-size: clamp(0.38rem, 1.75vw, 0.52rem);
+                    line-height: 1.12;
+                }
+
+                @media (min-width: 640px) and (max-width: 1023px) {
+                    .fd-hero-section {
+                        min-height: auto !important;
+                        padding-bottom: 0 !important;
+                    }
+
+                    .fd-hero-shell {
+                        min-height: auto !important;
+                        padding-top: 132px !important;
+                        padding-bottom: 18px !important;
+                        align-items: flex-start !important;
+                    }
+
+                    .fd-desktop-grid {
+                        grid-template-columns: 0.86fr 1.14fr !important;
+                        align-items: start !important;
+                        gap: 1rem !important;
+                    }
+
+                    .fd-desktop-left {
+                        padding-top: 34px !important;
+                    }
+
+                    .fd-desktop-title {
+                        margin-bottom: 14px !important;
+                    }
+
+                    .fd-desktop-title img {
+                        max-height: 150px !important;
+                        max-width: 430px !important;
+                    }
+
+                    .fd-desktop-welcome {
+                        margin-bottom: 12px !important;
+                    }
+
+                    .fd-desktop-subtitle {
+                        margin-bottom: 12px !important;
+                    }
+
+                    .fd-desktop-description {
+                        margin-bottom: 16px !important;
+                        max-width: 360px !important;
+                        font-size: 0.86rem !important;
+                        line-height: 1.55 !important;
+                    }
+
+                    .fd-desktop-actions {
+                        margin-bottom: 18px !important;
+                        gap: 12px !important;
+                    }
+
+                    .fd-desktop-actions button {
+                        padding: 13px 24px !important;
+                        font-size: 0.82rem !important;
+                    }
+
+                    .fd-desktop-stats {
+                        max-width: 390px !important;
+                        gap: 10px !important;
+                        position: relative !important;
+                        z-index: 30 !important;
+                    }
+
+                    .fd-desktop-stats > div {
+                        gap: 10px !important;
+                    }
+
+                    .fd-desktop-stats svg {
+                        width: 26px !important;
+                        height: 26px !important;
+                    }
+
+                    .fd-desktop-stat-number {
+                        font-size: 1.45rem !important;
+                    }
+
+                    .fd-desktop-stat-label {
+                        font-size: 0.72rem !important;
+                        line-height: 1.15 !important;
+                    }
+
+                    .fd-desktop-right {
+                        min-height: 445px !important;
+                        align-items: flex-end !important;
+                        overflow: visible !important;
+                    }
+
+                    .fd-desktop-character {
+                        position: relative !important;
+                        z-index: 10 !important;
+                    }
+
+                    .fd-desktop-character img {
+                        max-height: 440px !important;
+                        max-width: 570px !important;
+                    }
+
+                    .fd-tablet-services {
+                        position: relative !important;
+                        z-index: 25 !important;
+                        margin-top: 0 !important;
+                        padding-top: 0 !important;
+                        padding-bottom: 36px !important;
+                    }
+
+                    .fd-tablet-service-card {
+                        padding: 16px 18px !important;
+                        min-height: 76px !important;
+                        gap: 12px !important;
+                    }
+
+                    .fd-tablet-service-card svg {
+                        width: 34px !important;
+                        height: 34px !important;
+                    }
+
+                    .fd-tablet-service-card h3 {
+                        font-size: 0.92rem !important;
+                    }
+
+                    .fd-tablet-service-card p {
+                        font-size: 0.78rem !important;
+                    }
+                }
+
+                @media (max-width: 360px) {
+                    .fd-mobile-stage {
+                        height: 234px;
+                    }
+
+                    .fd-mobile-title {
+                        width: 172px;
+                    }
+
+                    .fd-mobile-character {
+                        width: 258px;
+                        right: -82px;
+                        top: 98px;
+                    }
+
+                    .fd-mobile-content {
+                        margin-top: -38px;
+                    }
+
+                    .fd-mobile-text-area {
+                        max-width: 56%;
+                    }
+
+                    .fd-mobile-actions {
+                        width: 148px;
+                        max-width: 52%;
+                    }
+                }
+
+                @media (min-width: 430px) and (max-width: 767px) {
+                    .fd-mobile-stage {
+                        height: 286px;
+                    }
+
+                    .fd-mobile-title {
+                        width: 232px;
+                    }
+
+                    .fd-mobile-character {
+                        width: 320px;
+                        right: -62px;
+                        top: 108px;
+                    }
+
+                    .fd-mobile-content {
+                        margin-top: -38px;
+                    }
+
+                    .fd-mobile-text-area {
+                        max-width: 54%;
+                    }
+
+                    .fd-mobile-actions {
+                        width: 190px;
+                        max-width: 52%;
+                    }
+                }
+
                 @media (max-width: 479px) {
                     .hero-character-float,
                     .hero-soft-glow,
@@ -398,9 +630,7 @@ export default function Hero({ heroSetting = null }) {
             {hero.backgroundImage && (
                 <div
                     className="absolute inset-0 z-0 bg-cover bg-center opacity-70"
-                    style={{
-                        backgroundImage: `url(${hero.backgroundImage})`,
-                    }}
+                    style={{ backgroundImage: `url(${hero.backgroundImage})` }}
                 />
             )}
 
@@ -425,34 +655,35 @@ export default function Hero({ heroSetting = null }) {
             <div className="hero-mobile-hide absolute left-0 top-1/2 z-0 h-px w-full bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
 
             <div
-                className={`relative z-10 mx-auto flex w-full max-w-[1600px] items-center px-3 pb-4 pt-14 transition-all duration-1000 sm:min-h-screen sm:px-8 sm:pb-10 sm:pt-20 lg:px-12 xl:px-16 ${
+                className={`fd-hero-shell relative z-10 mx-auto w-full max-w-[1720px] px-4 pb-6 transition-all duration-1000 sm:flex sm:min-h-screen sm:items-center sm:px-8 sm:pb-10 sm:pt-28 lg:px-12 xl:px-16 2xl:px-20 ${
                     isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                 }`}
             >
-                <div className="grid w-full grid-cols-2 items-end gap-2 sm:items-center sm:gap-6 lg:gap-10 lg:grid-cols-[0.92fr_1.08fr]">
-                    <div className="relative z-20 max-w-3xl pt-2 lg:pt-20">
-                        <div className="mb-2 flex items-center gap-1.5 sm:mb-5 sm:gap-3">
-                            <span className="h-px w-5 bg-red-500 sm:w-10" />
-                            <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-red-500 sm:text-xs sm:tracking-[0.45em] lg:text-sm">
+                {/* DESKTOP / TABLET */}
+                <div className="fd-desktop-grid hidden w-full sm:grid sm:items-center sm:gap-8 sm:grid-cols-[0.94fr_1.06fr] lg:gap-10 xl:gap-12">
+                    <div className="fd-desktop-left relative z-20 max-w-3xl lg:pt-8 xl:pt-10">
+                        <div className="fd-desktop-welcome mb-5 flex items-center gap-3">
+                            <span className="h-px w-10 bg-red-500" />
+                            <p className="text-xs font-bold uppercase tracking-[0.45em] text-red-500 lg:text-sm">
                                 {hero.welcomeText}
                             </p>
                         </div>
 
-                        <div className="relative mb-3 sm:mb-6">
+                        <div className="fd-desktop-title relative mb-5">
                             {hero.titleImage ? (
                                 <img
                                     src={hero.titleImage}
-                                    alt="Find Design"
+                                    alt="Fiind Design"
                                     loading="eager"
                                     decoding="async"
                                     fetchPriority="high"
-                                    className="max-h-[80px] w-full max-w-full object-contain object-left drop-shadow-[0_0_32px_rgba(220,38,38,0.38)] sm:max-h-[200px] sm:-ml-1 sm:max-w-[680px] lg:-ml-4 lg:max-h-[360px] xl:-ml-20"
+                                    className="-ml-1 max-h-[210px] w-full max-w-[620px] object-contain object-left drop-shadow-[0_0_34px_rgba(220,38,38,0.42)] lg:-ml-2 lg:max-h-[290px] lg:max-w-[700px] xl:-ml-8 xl:max-h-[330px] xl:max-w-[760px]"
                                     onError={(event) => {
                                         event.currentTarget.style.display = 'none';
                                     }}
                                 />
                             ) : (
-                                <h1 className="text-3xl font-black uppercase leading-[0.9] tracking-tight sm:text-5xl lg:text-7xl xl:text-8xl">
+                                <h1 className="text-5xl font-black uppercase leading-[0.9] tracking-tight lg:text-7xl xl:text-8xl">
                                     <span className="block bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
                                         Fiind
                                     </span>
@@ -468,7 +699,7 @@ export default function Hero({ heroSetting = null }) {
                                     alt="Signature"
                                     loading="lazy"
                                     decoding="async"
-                                    className="hero-mobile-hide absolute right-4 top-8 max-h-24 max-w-[190px] opacity-50"
+                                    className="absolute right-6 top-6 max-h-20 max-w-[170px] opacity-50"
                                     onError={(event) => {
                                         event.currentTarget.style.display = 'none';
                                     }}
@@ -476,25 +707,25 @@ export default function Hero({ heroSetting = null }) {
                             )}
                         </div>
 
-                        <div className="mb-2 flex items-center gap-2 sm:mb-5 sm:gap-3">
-                            <span className="h-5 w-0.5 rounded-full bg-red-600 shadow-[0_0_22px_rgba(220,38,38,0.9)] sm:h-8 sm:w-1" />
-                            <h2 className="text-[8px] font-extrabold uppercase tracking-[0.1em] text-white/90 sm:text-sm sm:tracking-[0.14em] lg:text-xl">
+                        <div className="fd-desktop-subtitle mb-5 flex items-center gap-3">
+                            <span className="h-8 w-1 rounded-full bg-red-600 shadow-[0_0_22px_rgba(220,38,38,0.9)]" />
+                            <h2 className="text-base font-extrabold uppercase tracking-[0.13em] text-white/90 lg:text-xl xl:text-[1.4rem]">
                                 {hero.subtitle}
                             </h2>
                         </div>
 
-                        <p className="mb-4 max-w-xl text-[9px] leading-relaxed text-white/62 sm:mb-8 sm:text-base lg:text-lg">
+                        <p className="fd-desktop-description mb-8 max-w-xl text-base leading-relaxed text-white/66 lg:text-lg">
                             {hero.description}
                         </p>
 
-                        <div className="mb-4 flex flex-col gap-2 sm:mb-10 sm:flex-row sm:gap-4">
+                        <div className="fd-desktop-actions mb-9 flex flex-row gap-4">
                             <button
                                 type="button"
                                 onClick={() => scrollToSection(hero.primaryButtonLink)}
-                                className="hero-shine relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg border border-red-400/60 bg-gradient-to-r from-red-600 to-red-500 px-4 py-2.5 text-[10px] font-extrabold text-white shadow-[0_0_32px_rgba(220,38,38,0.45)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_48px_rgba(220,38,38,0.65)] sm:gap-4 sm:rounded-xl sm:px-8 sm:py-4 sm:text-sm lg:text-base"
+                                className="hero-shine relative inline-flex items-center justify-center gap-4 overflow-hidden rounded-xl border border-red-400/60 bg-gradient-to-r from-red-600 to-red-500 px-8 py-4 text-sm font-extrabold text-white shadow-[0_0_34px_rgba(220,38,38,0.48)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_48px_rgba(220,38,38,0.65)] lg:text-base"
                             >
                                 <span>{hero.primaryButtonText}</span>
-                                <svg className="h-3 w-3 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-6-6l6 6-6 6" />
                                 </svg>
                             </button>
@@ -502,33 +733,30 @@ export default function Hero({ heroSetting = null }) {
                             <button
                                 type="button"
                                 onClick={() => scrollToSection(hero.secondaryButtonLink)}
-                                className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-500/45 bg-white/[0.035] px-4 py-2.5 text-[10px] font-extrabold text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-red-400 hover:bg-red-500/10 sm:gap-4 sm:rounded-xl sm:px-8 sm:py-4 sm:text-sm lg:text-base"
+                                className="inline-flex items-center justify-center gap-4 rounded-xl border border-red-500/45 bg-white/[0.035] px-8 py-4 text-sm font-extrabold text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-red-400 hover:bg-red-500/10 lg:text-base"
                             >
                                 <span>{hero.secondaryButtonText}</span>
-                                <svg className="h-3 w-3 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-6-6l6 6-6 6" />
                                 </svg>
                             </button>
                         </div>
 
-                        <div className="grid max-w-2xl grid-cols-3 gap-1 sm:gap-4">
+                        <div className="fd-desktop-stats grid max-w-2xl grid-cols-3 gap-4">
                             {hero.stats.slice(0, 3).map((stat, index) => (
                                 <div
                                     key={`${stat.label}-${index}`}
-                                    className="group flex items-center gap-1.5 border-red-500/20 sm:gap-4 sm:border-r sm:last:border-r-0"
+                                    className="group flex items-center gap-3 border-r border-red-500/20 last:border-r-0"
                                 >
-                                    <div className="hidden text-red-500 drop-shadow-[0_0_16px_rgba(239,68,68,0.65)] transition-transform duration-300 group-hover:scale-110 sm:block">
+                                    <div className="text-red-500 drop-shadow-[0_0_16px_rgba(239,68,68,0.65)] transition-transform duration-300 group-hover:scale-110">
                                         {getStatIcon(stat.icon)}
-                                    </div>
-                                    <div className="text-red-500 drop-shadow-[0_0_16px_rgba(239,68,68,0.65)] sm:hidden">
-                                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M6 3h12l4 6-10 12L2 9l4-6z"/></svg>
                                     </div>
 
                                     <div>
-                                        <div className="text-base font-black text-white sm:text-2xl lg:text-3xl">
+                                        <div className="fd-desktop-stat-number text-3xl font-black leading-none text-white lg:text-[2rem]">
                                             {stat.number}
                                         </div>
-                                        <div className="text-[7px] text-white/55 sm:text-xs lg:text-sm">
+                                        <div className="fd-desktop-stat-label text-sm text-white/55">
                                             {stat.label}
                                         </div>
                                     </div>
@@ -537,22 +765,22 @@ export default function Hero({ heroSetting = null }) {
                         </div>
                     </div>
 
-                    <div className="relative z-10 flex items-end justify-center sm:min-h-[470px] lg:min-h-[720px]">
-                        <div className="hero-mobile-hide hero-soft-glow absolute right-[6%] top-[8%] h-[560px] w-[560px] rounded-full border border-red-500/25 shadow-[0_0_90px_rgba(220,38,38,0.24)]" />
-                        <div className="hero-mobile-hide absolute right-[15%] top-[16%] h-[410px] w-[410px] rounded-full border border-red-500/20" />
+                    <div className="fd-desktop-right relative z-10 flex min-h-[520px] items-end justify-center lg:min-h-[620px] xl:min-h-[700px]">
+                        <div className="hero-soft-glow absolute right-[8%] top-[11%] h-[420px] w-[420px] rounded-full border border-red-500/25 shadow-[0_0_90px_rgba(220,38,38,0.22)] xl:h-[500px] xl:w-[500px]" />
+                        <div className="absolute right-[15%] top-[19%] h-[310px] w-[310px] rounded-full border border-red-500/20 xl:h-[390px] xl:w-[390px]" />
 
                         {!isLightDevice && (
                             <>
-                                <div className="hero-mobile-hide absolute right-[5%] top-[28%] h-28 w-2 rotate-45 bg-gradient-to-b from-red-400 to-transparent shadow-[0_0_24px_rgba(239,68,68,0.9)]" />
-                                <div className="hero-mobile-hide absolute left-[11%] top-[42%] h-36 w-3 -rotate-45 bg-gradient-to-b from-red-600 to-transparent shadow-[0_0_28px_rgba(239,68,68,0.8)]" />
-                                <div className="hero-mobile-hide absolute bottom-[22%] right-[10%] h-24 w-2 -rotate-12 bg-gradient-to-b from-red-500 to-transparent shadow-[0_0_20px_rgba(239,68,68,0.8)]" />
+                                <div className="absolute right-[8%] top-[34%] h-24 w-2 rotate-45 bg-gradient-to-b from-red-400 to-transparent shadow-[0_0_24px_rgba(239,68,68,0.9)]" />
+                                <div className="absolute left-[12%] top-[46%] h-28 w-3 -rotate-45 bg-gradient-to-b from-red-600 to-transparent shadow-[0_0_28px_rgba(239,68,68,0.8)]" />
+                                <div className="absolute bottom-[26%] right-[13%] h-20 w-2 -rotate-12 bg-gradient-to-b from-red-500 to-transparent shadow-[0_0_20px_rgba(239,68,68,0.8)]" />
                             </>
                         )}
 
-                        <div className="hero-mobile-hide absolute bottom-12 right-[10%] h-[420px] w-[520px] rounded-full bg-red-600/25 blur-3xl" />
+                        <div className="absolute bottom-14 right-[12%] h-[300px] w-[380px] rounded-full bg-red-600/25 blur-3xl xl:h-[380px] xl:w-[460px]" />
 
                         {hero.characterDesktop && (
-                            <picture className="relative z-10 flex w-full justify-center">
+                            <picture className="fd-desktop-character relative z-10 flex w-full justify-center">
                                 {hero.characterMobile && (
                                     <source media="(max-width: 767px)" srcSet={hero.characterMobile} />
                                 )}
@@ -563,7 +791,7 @@ export default function Hero({ heroSetting = null }) {
                                     loading="eager"
                                     decoding="async"
                                     fetchPriority="high"
-                                    className={`hero-character-float w-full max-h-[160px] max-w-full object-contain object-bottom drop-shadow-[0_0_38px_rgba(220,38,38,0.45)] sm:max-h-[520px] sm:max-w-[720px] lg:max-h-[760px] lg:max-w-[920px] ${
+                                    className={`hero-character-float max-h-[500px] w-full max-w-[650px] object-contain object-bottom drop-shadow-[0_0_40px_rgba(220,38,38,0.5)] lg:max-h-[600px] lg:max-w-[760px] xl:max-h-[700px] xl:max-w-[850px] ${
                                         isLightDevice ? 'hero-mobile-no-blur' : ''
                                     }`}
                                     onError={(event) => {
@@ -573,18 +801,18 @@ export default function Hero({ heroSetting = null }) {
                             </picture>
                         )}
 
-                        <div className="absolute bottom-0 left-1/2 z-20 hidden w-full max-w-[760px] -translate-x-1/2 grid-cols-3 overflow-hidden rounded-2xl border border-red-500/25 bg-black/55 shadow-[0_0_45px_rgba(220,38,38,0.16)] backdrop-blur-md lg:grid">
+                        <div className="absolute bottom-5 left-1/2 z-20 hidden w-full max-w-[760px] -translate-x-1/2 grid-cols-3 overflow-hidden rounded-2xl border border-red-500/25 bg-black/55 shadow-[0_0_45px_rgba(220,38,38,0.16)] backdrop-blur-md lg:grid">
                             {hero.serviceCards.slice(0, 3).map((service, index) => (
                                 <div
                                     key={`${service.title}-${index}`}
-                                    className="group relative flex items-center gap-5 border-r border-red-500/20 px-8 py-7 last:border-r-0 hover:bg-red-500/10"
+                                    className="group relative flex items-center gap-4 border-r border-red-500/20 px-7 py-6 last:border-r-0 hover:bg-red-500/10"
                                 >
                                     <div className="text-red-500 drop-shadow-[0_0_18px_rgba(239,68,68,0.75)] transition-transform duration-300 group-hover:scale-110">
                                         {getServiceIcon(service.icon)}
                                     </div>
 
                                     <div>
-                                        <h3 className="font-extrabold text-white">
+                                        <h3 className="text-base font-extrabold text-white">
                                             {service.title}
                                         </h3>
                                         <p className="mt-1 text-sm text-white/55">
@@ -595,6 +823,200 @@ export default function Hero({ heroSetting = null }) {
                                     <div className="absolute bottom-0 left-1/2 h-1 w-14 -translate-x-1/2 rounded-t-full bg-red-500 shadow-[0_0_22px_rgba(239,68,68,0.95)]" />
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* MOBILE */}
+                <div className="flex w-full flex-col sm:hidden">
+                    <div className="fd-mobile-stage relative w-full overflow-visible pt-[clamp(132px,31vw,152px)]">
+                        <div className="pointer-events-none absolute right-[-40%] top-[82px] h-[330px] w-[105%] rounded-full bg-red-700/32 blur-3xl" />
+                        <div className="pointer-events-none absolute left-[-30%] top-[100px] h-[250px] w-[75%] rounded-full bg-red-950/35 blur-2xl" />
+
+                        {hero.characterDesktop && (
+                            <div className="fd-mobile-character absolute z-10">
+                                <picture className="block w-full">
+                                    {hero.characterMobile && (
+                                        <source media="(max-width: 767px)" srcSet={hero.characterMobile} />
+                                    )}
+
+                                    <img
+                                        src={hero.characterDesktop}
+                                        alt="Fiind Design Character"
+                                        loading="eager"
+                                        decoding="async"
+                                        fetchPriority="high"
+                                        className={`hero-character-float w-full object-contain object-top drop-shadow-[0_0_48px_rgba(220,38,38,0.75)] ${
+                                            isLightDevice ? 'hero-mobile-no-blur' : ''
+                                        }`}
+                                        onError={(event) => {
+                                            event.currentTarget.style.display = 'none';
+                                        }}
+                                    />
+                                </picture>
+                            </div>
+                        )}
+
+                        <div className="fd-mobile-title relative z-20 pb-2">
+                            <div className="mb-2 flex items-center gap-2">
+                                <span className="h-px w-8 bg-red-500" />
+                                <p className="text-[clamp(7px,2vw,9px)] font-bold uppercase tracking-[0.32em] text-red-500">
+                                    {hero.welcomeText}
+                                </p>
+                            </div>
+
+                            {hero.titleImage ? (
+                                <img
+                                    src={hero.titleImage}
+                                    alt="Fiind Design"
+                                    loading="eager"
+                                    decoding="async"
+                                    fetchPriority="high"
+                                    className="-ml-1 w-full object-contain object-left drop-shadow-[0_0_30px_rgba(220,38,38,0.65)]"
+                                    onError={(event) => {
+                                        event.currentTarget.style.display = 'none';
+                                    }}
+                                />
+                            ) : (
+                                <h1 className="text-[clamp(2.4rem,10vw,3.3rem)] font-black uppercase leading-[0.82] tracking-tight">
+                                    <span className="block bg-gradient-to-b from-white to-gray-300 bg-clip-text text-transparent">
+                                        Fiind
+                                    </span>
+                                    <span className="block bg-gradient-to-b from-red-500 to-red-700 bg-clip-text text-transparent">
+                                        Design
+                                    </span>
+                                </h1>
+                            )}
+
+                            {hero.signatureImage && (
+                                <img
+                                    src={hero.signatureImage}
+                                    alt="Signature"
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="absolute left-[72%] top-[42%] max-h-[70px] w-[90px] object-contain opacity-60"
+                                    onError={(event) => {
+                                        event.currentTarget.style.display = 'none';
+                                    }}
+                                />
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="fd-mobile-content relative z-30 w-full">
+                        <div className="fd-mobile-text-area">
+                            <div className="mb-2 flex items-start gap-2">
+                                <span className="mt-1 h-[clamp(28px,7vw,36px)] w-[3px] shrink-0 rounded-full bg-red-600 shadow-[0_0_16px_rgba(220,38,38,0.9)]" />
+
+                                <h2 className="fd-mobile-subtitle font-extrabold uppercase text-white">
+                                    {hero.subtitle}
+                                </h2>
+                            </div>
+
+                            <p className="fd-mobile-description mb-3 text-white/65">
+                                {hero.description}
+                            </p>
+                        </div>
+
+                        <div className="fd-mobile-actions mb-5 flex flex-col gap-2">
+                            <button
+                                type="button"
+                                onClick={() => scrollToSection(hero.primaryButtonLink)}
+                                className="fd-mobile-button hero-shine relative flex w-full items-center justify-between overflow-hidden border border-red-400/60 bg-gradient-to-r from-red-600 to-red-500 font-extrabold text-white shadow-[0_0_24px_rgba(220,38,38,0.38)] transition-all duration-300 active:scale-[0.98]"
+                            >
+                                <span>{hero.primaryButtonText}</span>
+                                <svg className="h-[clamp(11px,3vw,14px)] w-[clamp(11px,3vw,14px)] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-6-6l6 6-6 6" />
+                                </svg>
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => scrollToSection(hero.secondaryButtonLink)}
+                                className="fd-mobile-button flex w-full items-center justify-between border border-red-500/45 bg-black/50 font-extrabold text-white shadow-[0_0_16px_rgba(220,38,38,0.12)] transition-all duration-300 active:scale-[0.98]"
+                            >
+                                <span>{hero.secondaryButtonText}</span>
+                                <svg className="h-[clamp(11px,3vw,14px)] w-[clamp(11px,3vw,14px)] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-6-6l6 6-6 6" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="mb-6 grid grid-cols-3 gap-2.5">
+                            {hero.stats.slice(0, 3).map((stat, index) => (
+                                <div
+                                    key={`${stat.label}-${index}`}
+                                    className="fd-mobile-stat-card relative flex flex-col items-center justify-center gap-1.5 overflow-hidden border border-red-500/25 bg-black/45 px-2 py-2.5 shadow-[0_0_18px_rgba(220,38,38,0.08)]"
+                                >
+                                    <div className="fd-mobile-stat-icon text-red-500 drop-shadow-[0_0_12px_rgba(239,68,68,0.75)]">
+                                        {getStatIcon(stat.icon)}
+                                    </div>
+
+                                    <div className="fd-mobile-stat-number font-black leading-none text-white">
+                                        {stat.number}
+                                    </div>
+
+                                    <div className="fd-mobile-stat-label px-1 text-center text-white/56">
+                                        {stat.label}
+                                    </div>
+
+                                    <div className="absolute bottom-0 left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-t-full bg-red-500 shadow-[0_0_16px_rgba(239,68,68,0.9)]" />
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="pb-10">
+                            <div className="mb-3 flex items-end justify-between gap-3">
+                                <div className="min-w-0">
+                                    <div className="mb-1.5 flex items-center gap-2">
+                                        <span className="text-[clamp(6px,1.85vw,8px)] font-black uppercase tracking-[0.34em] text-red-500">
+                                            Services
+                                        </span>
+                                    </div>
+
+                                    <h3 className="fd-mobile-service-title font-black leading-none text-white drop-shadow-[0_0_16px_rgba(255,255,255,0.08)]">
+                                        What We Do
+                                    </h3>
+
+                                    <p className="fd-mobile-service-desc mt-1.5 text-white/58">
+                                        Creative solutions that elevate your brand.
+                                    </p>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => scrollToSection('#services')}
+                                    className="mb-1 flex shrink-0 items-center gap-1.5 rounded-xl border border-red-500/45 bg-black/55 px-[clamp(9px,2.8vw,13px)] py-[clamp(6px,2vw,9px)] text-[clamp(0.52rem,2.25vw,0.66rem)] font-extrabold text-white shadow-[0_0_18px_rgba(220,38,38,0.14)]"
+                                >
+                                    View All
+                                    <svg className="h-[clamp(11px,3.2vw,15px)] w-[clamp(11px,3.2vw,15px)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-6-6l6 6-6 6" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-2.5">
+                                {hero.serviceCards.slice(0, 3).map((service, index) => (
+                                    <div
+                                        key={`${service.title}-mobile-${index}`}
+                                        className="fd-mobile-service-card relative flex flex-col items-center justify-center overflow-hidden border border-red-500/25 bg-black/45 px-2 py-2.5 text-center shadow-[0_0_18px_rgba(220,38,38,0.08)]"
+                                    >
+                                        <div className="fd-mobile-service-icon mb-1.5 text-red-500 drop-shadow-[0_0_14px_rgba(239,68,68,0.75)]">
+                                            {getServiceIcon(service.icon)}
+                                        </div>
+
+                                        <h4 className="fd-mobile-service-card-title font-black text-white">
+                                            {service.title}
+                                        </h4>
+
+                                        <p className="fd-mobile-service-card-desc mt-1 text-white/55">
+                                            {service.subtitle}
+                                        </p>
+
+                                        <div className="absolute bottom-0 left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-t-full bg-red-500 shadow-[0_0_16px_rgba(239,68,68,0.9)]" />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -615,11 +1037,11 @@ export default function Hero({ heroSetting = null }) {
                 ))}
             </div>
 
-            <div className="relative z-20 mx-auto hidden grid-cols-1 gap-4 px-5 pb-10 sm:grid sm:grid-cols-3 lg:hidden max-w-5xl">
+            <div className="fd-tablet-services relative z-20 mx-auto hidden max-w-5xl grid-cols-1 gap-3 px-8 pb-8 sm:grid sm:grid-cols-3 lg:hidden">
                 {hero.serviceCards.slice(0, 3).map((service, index) => (
                     <div
-                        key={`${service.title}-mobile-${index}`}
-                        className="flex items-center gap-4 rounded-2xl border border-red-500/25 bg-slate-950/90 p-5"
+                        key={`${service.title}-tablet-${index}`}
+                        className="fd-tablet-service-card flex min-h-[76px] items-center gap-3 rounded-2xl border border-red-500/25 bg-slate-950/90 p-4 shadow-[0_0_18px_rgba(220,38,38,0.08)]"
                     >
                         <div className="text-red-500">
                             {getServiceIcon(service.icon)}
