@@ -335,21 +335,21 @@ export default function About({ aboutSetting = null }) {
                             </div>
 
                             <div className="mt-10 border-t border-white/10 pt-9">
-                                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                                     {about.stats.slice(0, 4).map((stat, index) => (
                                         <div
                                             key={`${stat.label}-${index}`}
-                                            className="group relative flex items-center gap-5 rounded-2xl border border-transparent px-2 py-3 transition-all duration-300 sm:px-0 xl:justify-center xl:border-r xl:border-white/10 xl:rounded-none xl:last:border-r-0"
+                                            className="group relative flex flex-col items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-5 text-center transition-all duration-300 hover:border-red-500/30 hover:bg-white/[0.06]"
                                         >
-                                            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-red-500/20 bg-[linear-gradient(180deg,rgba(18,18,18,0.96)_0%,rgba(8,8,8,0.98)_100%)] text-red-500 shadow-[0_0_22px_rgba(220,38,38,0.10)] transition-all duration-300 group-hover:-translate-y-1 group-hover:border-red-400/40 group-hover:shadow-[0_0_28px_rgba(220,38,38,0.22)]">
+                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-red-500/20 bg-[linear-gradient(180deg,rgba(18,18,18,0.96)_0%,rgba(8,8,8,0.98)_100%)] text-red-500 shadow-[0_0_22px_rgba(220,38,38,0.10)] transition-all duration-300 group-hover:-translate-y-1 group-hover:border-red-400/40 group-hover:shadow-[0_0_28px_rgba(220,38,38,0.22)]">
                                                 {getStatIcon(index)}
                                             </div>
 
-                                            <div className="min-w-0">
-                                                <div className="text-4xl font-black leading-none tracking-tight text-red-500 sm:text-5xl">
+                                            <div>
+                                                <div className="text-3xl font-black leading-none tracking-tight text-red-500 sm:text-4xl">
                                                     {stat.number}
                                                 </div>
-                                                <div className="mt-2 text-sm font-medium text-white/70 sm:text-base">
+                                                <div className="mt-1.5 text-xs font-medium leading-tight text-white/70 sm:text-sm">
                                                     {stat.label}
                                                 </div>
                                             </div>
