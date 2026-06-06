@@ -9,16 +9,23 @@ class PortfolioItem extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    // PERBAIKAN: Tambahkan properti ini agar formulir bisa mengisi kolom-kolom berikut.
     protected $fillable = [
         'title',
         'category',
+        'description',
         'image',
     ];
-}
 
+    protected $appends = [
+        'image_url',
+    ];
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->image) {
+            return null;
+        }
+
+        return asset('storage/' . ltrim($this->image, '/'));
+    }
+}

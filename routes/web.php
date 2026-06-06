@@ -4,12 +4,14 @@ use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\FeaturedWorkController;
 use App\Http\Controllers\Admin\HeroSettingController;
 use App\Http\Controllers\Admin\AboutSettingController;
+use App\Http\Controllers\Admin\ServiceSettingController;
 use App\Http\Controllers\ProfileController;
 
 use App\Models\PortfolioItem;
 use App\Models\FeaturedWork;
 use App\Models\HeroSetting;
 use App\Models\AboutSetting;
+use App\Models\ServiceSetting;
 use App\Models\Visitor;
 
 use Illuminate\Foundation\Application;
@@ -45,9 +47,6 @@ Route::get('/', function (Request $request) {
         |--------------------------------------------------------------------------
         | Hero Section Setting
         |--------------------------------------------------------------------------
-        |
-        | Data ini digunakan untuk mengontrol Hero.jsx dari admin Blade.
-        |
         */
         'heroSetting' => HeroSetting::where('is_active', true)->first(),
 
@@ -55,19 +54,20 @@ Route::get('/', function (Request $request) {
         |--------------------------------------------------------------------------
         | About Section Setting
         |--------------------------------------------------------------------------
-        |
-        | Data ini digunakan untuk mengontrol About.jsx dari admin Blade.
-        |
         */
         'aboutSetting' => AboutSetting::where('is_active', true)->first(),
 
         /*
         |--------------------------------------------------------------------------
+        | Service Section Setting
+        |--------------------------------------------------------------------------
+        */
+        'serviceSetting' => ServiceSetting::where('is_active', true)->first(),
+
+        /*
+        |--------------------------------------------------------------------------
         | Portfolio Items
         |--------------------------------------------------------------------------
-        |
-        | Data portfolio yang ditampilkan di halaman frontend.
-        |
         */
         'portfolioItems' => PortfolioItem::latest()->get(),
 
@@ -75,9 +75,6 @@ Route::get('/', function (Request $request) {
         |--------------------------------------------------------------------------
         | Featured Works
         |--------------------------------------------------------------------------
-        |
-        | Data featured works untuk About.jsx.
-        |
         */
         'featuredWorks' => FeaturedWork::latest()->get()->map(function ($item) {
             return [
@@ -158,6 +155,17 @@ Route::middleware(['auth', 'verified'])
 
         Route::put('about-settings', [AboutSettingController::class, 'update'])
             ->name('about-settings.update');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Manajemen Our Services Section
+        |--------------------------------------------------------------------------
+        */
+        Route::get('service-settings', [ServiceSettingController::class, 'edit'])
+            ->name('service-settings.edit');
+
+        Route::put('service-settings', [ServiceSettingController::class, 'update'])
+            ->name('service-settings.update');
 
         /*
         |--------------------------------------------------------------------------

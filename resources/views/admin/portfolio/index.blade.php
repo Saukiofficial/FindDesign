@@ -3,254 +3,281 @@
 @section('page-title', 'Portfolio Management')
 
 @section('content')
-    <div class="space-y-6">
-        {{-- Header Section --}}
-        <div class="flex justify-between items-center">
+<div class="space-y-8">
+
+    {{-- HEADER --}}
+    <div class="relative overflow-hidden rounded-3xl border border-red-500/20 bg-gradient-to-br from-gray-900 via-red-950/40 to-black p-8 shadow-2xl">
+        <div class="relative z-10">
+            <div class="mb-3 inline-flex rounded-full border border-red-500/40 bg-black/40 px-4 py-2 text-xs font-black uppercase tracking-[0.25em] text-red-400">
+                Portfolio Admin
+            </div>
+
+            <h1 class="text-3xl md:text-4xl font-black text-white">
+                Portfolio Management
+            </h1>
+
+            <p class="mt-2 max-w-2xl text-sm text-gray-400">
+                Kelola karya portfolio yang akan tampil di frontend dengan tema dark red premium.
+            </p>
+        </div>
+
+        <div class="absolute right-0 top-0 h-72 w-72 rounded-full bg-red-600/20 blur-3xl"></div>
+        <div class="absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-red-900/30 blur-3xl"></div>
+    </div>
+
+    {{-- ALERT SUCCESS --}}
+    @if (session('success'))
+        <div class="rounded-2xl border border-green-500/30 bg-green-500/10 px-5 py-4 text-green-300">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    {{-- ALERT ERROR --}}
+    @if (session('error'))
+        <div class="rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-red-300">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    {{-- VALIDATION --}}
+    @if ($errors->any())
+        <div class="rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-red-300">
+            <div class="mb-2 font-bold">Terjadi kesalahan:</div>
+            <ul class="list-inside list-disc space-y-1 text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    {{-- FORM TAMBAH --}}
+    <div class="relative overflow-hidden rounded-3xl border border-gray-700/70 bg-gray-900 p-6 shadow-2xl">
+        <div class="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-red-600/10 blur-3xl"></div>
+
+        <div class="relative z-10 mb-6 flex items-center gap-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-red-600 to-red-900 shadow-lg shadow-red-900/40">
+                <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+            </div>
+
             <div>
-                <h1 class="text-3xl font-bold bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">Portfolio Management</h1>
-                <p class="mt-1 text-sm text-gray-400">Kelola item portfolio Anda dengan mudah</p>
+                <h2 class="text-xl font-bold text-white">
+                    Tambah Portfolio Baru
+                </h2>
+                <p class="text-sm text-gray-400">
+                    Upload karya terbaru dan isi detailnya.
+                </p>
             </div>
         </div>
 
-        {{-- Alert Success --}}
-        @if (session('success'))
-            <div class="bg-gradient-to-r from-red-900/20 to-red-800/20 border-l-4 border-red-500 p-4 rounded-xl shadow-lg backdrop-blur-sm">
-                <div class="flex items-start">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-red-300">{{ session('success') }}</p>
-                    </div>
-                    <button type="button" class="ml-auto -mx-1.5 -my-1.5 rounded-lg p-1.5 inline-flex h-8 w-8 text-red-400 hover:bg-red-800/30" onclick="this.parentElement.parentElement.remove()">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                        </svg>
-                    </button>
+        <form
+            action="{{ route('admin.portfolio.store') }}"
+            method="POST"
+            enctype="multipart/form-data"
+            class="relative z-10 space-y-6"
+        >
+            @csrf
+
+            <div class="grid gap-6 lg:grid-cols-3">
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-gray-300">
+                        Judul Portfolio
+                    </label>
+                    <input
+                        type="text"
+                        name="title"
+                        value="{{ old('title') }}"
+                        required
+                        placeholder="Contoh: Dark Skull Illustration"
+                        class="w-full rounded-xl border-gray-700 bg-gray-950 text-white placeholder-gray-500 focus:border-red-500 focus:ring-red-500"
+                    >
                 </div>
-            </div>
-        @endif
 
-        {{-- Alert Error --}}
-        @if ($errors->any())
-            <div class="bg-gradient-to-r from-red-900/30 to-red-800/30 border-l-4 border-red-500 p-4 rounded-xl shadow-lg backdrop-blur-sm">
-                <div class="flex items-start">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div class="ml-3 flex-1">
-                        <p class="text-sm font-semibold text-red-300 mb-2">Terjadi kesalahan:</p>
-                        <ul class="list-disc list-inside text-sm text-red-400 space-y-1">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-gray-300">
+                        Kategori
+                    </label>
+                    <select
+                        name="category"
+                        required
+                        class="w-full rounded-xl border-gray-700 bg-gray-950 text-white focus:border-red-500 focus:ring-red-500"
+                    >
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category }}" {{ old('category') === $category ? 'selected' : '' }}>
+                                {{ $category }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
-            </div>
-        @endif
 
-        {{-- Form Tambah Item --}}
-        <div class="bg-gray-800 rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden relative">
-            <!-- Decorative gradient overlay -->
-            <div class="absolute top-0 right-0 w-64 h-64 bg-red-600 rounded-full opacity-5 blur-3xl -mr-32 -mt-32"></div>
-
-            <div class="px-6 py-5 border-b border-gray-700/50 relative z-10">
-                <div class="flex items-center">
-                    <div class="w-12 h-12 bg-gradient-to-br from-red-600 to-red-800 rounded-xl flex items-center justify-center shadow-lg shadow-red-900/50">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-white">Tambah Item Baru</h3>
-                        <p class="text-sm text-gray-400">Upload portfolio item baru ke galeri Anda</p>
-                    </div>
+                <div>
+                    <label class="mb-2 block text-sm font-semibold text-gray-300">
+                        Upload Gambar
+                    </label>
+                    <input
+                        type="file"
+                        name="image"
+                        accept="image/*"
+                        required
+                        class="block w-full text-sm text-gray-300 file:mr-4 file:rounded-xl file:border-0 file:bg-red-600 file:px-4 file:py-2 file:text-sm file:font-bold file:text-white hover:file:bg-red-700"
+                    >
+                    <p class="mt-2 text-xs text-gray-500">
+                        Format JPG, PNG, WEBP, SVG, GIF. Max 50MB.
+                    </p>
                 </div>
             </div>
 
-            <div class="p-6 relative z-10">
-                <form action="{{ route('admin.portfolio.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                    @csrf
+            <div>
+                <label class="mb-2 block text-sm font-semibold text-gray-300">
+                    Deskripsi
+                </label>
+                <textarea
+                    name="description"
+                    rows="4"
+                    placeholder="Tuliskan deskripsi singkat karya ini..."
+                    class="w-full rounded-xl border-gray-700 bg-gray-950 text-white placeholder-gray-500 focus:border-red-500 focus:ring-red-500"
+                >{{ old('description') }}</textarea>
+            </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {{-- Judul --}}
-                        <div class="space-y-2">
-                            <label for="title" class="block text-sm font-semibold text-gray-300">
-                                Judul Portfolio
-                            </label>
-                            <input
-                                type="text"
-                                name="title"
-                                id="title"
-                                class="block w-full px-4 py-3 rounded-xl border border-gray-600 bg-gray-700/50 text-white placeholder-gray-400 shadow-sm focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
-                                placeholder="Masukkan judul portfolio"
-                                value="{{ old('title') }}"
-                                required
-                            >
-                        </div>
+            <div class="flex justify-end">
+                <button
+                    type="submit"
+                    class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-red-600 to-red-800 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-red-900/40 transition hover:from-red-700 hover:to-red-900"
+                >
+                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Tambah Portfolio
+                </button>
+            </div>
+        </form>
+    </div>
 
-                        {{-- Kategori --}}
-                        <div class="space-y-2">
-                            <label for="category" class="block text-sm font-semibold text-gray-300">
-                                Kategori
-                            </label>
-                            <select
-                                name="category"
-                                id="category"
-                                class="block w-full px-4 py-3 rounded-xl border border-gray-600 bg-gray-700/50 text-white shadow-sm focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
-                                required
-                            >
-                                <option value="" disabled selected>Pilih Kategori</option>
-                                <option value="ILLUSTRATIONS" @if(old('category') == 'ILLUSTRATIONS') selected @endif>ILLUSTRATIONS</option>
-                                <option value="OTOMOTIF" @if(old('category') == 'OTOMOTIF') selected @endif>OTOMOTIF</option>
-                                <option value="BLUE COLLAR" @if(old('category') == 'BLUE COLLAR') selected @endif>BLUE COLLAR</option>
-                            </select>
-                        </div>
+    {{-- LIST --}}
+    <div class="relative overflow-hidden rounded-3xl border border-gray-700/70 bg-gray-900 shadow-2xl">
+        <div class="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-red-800/10 blur-3xl"></div>
 
-                        {{-- Gambar --}}
-                        <div class="space-y-2">
-                            <label for="image" class="block text-sm font-semibold text-gray-300">
-                                Upload Gambar
-                            </label>
-                            <div class="relative">
-                                <input
-                                    type="file"
-                                    name="image"
-                                    id="image"
-                                    class="block w-full px-4 py-3 text-sm text-gray-300 border border-gray-600 rounded-xl cursor-pointer bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200"
-                                    accept="image/*"
-                                    required
-                                >
-                            </div>
-                            <p class="text-xs text-gray-500">Format: JPG, PNG, atau GIF (Max: 50MB)</p>
-                        </div>
+        <div class="relative z-10 border-b border-gray-700/60 px-6 py-5">
+            <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-red-600 to-red-900 shadow-lg shadow-red-900/40">
+                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
                     </div>
 
-                    <div class="flex justify-end pt-4">
-                        <button
-                            type="submit"
-                            class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-600 to-red-800 text-white font-medium rounded-xl shadow-lg shadow-red-900/50 hover:shadow-xl hover:shadow-red-900/60 hover:from-red-700 hover:to-red-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-900"
-                        >
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                            </svg>
-                            Tambah Portfolio
-                        </button>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">
+                            Daftar Portfolio
+                        </h2>
+                        <p class="text-sm text-gray-400">
+                            Total: {{ $portfolioItems->count() }} item
+                        </p>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 
-        {{-- Tabel Daftar Item --}}
-        <div class="bg-gray-800 rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden relative">
-            <!-- Decorative gradient overlay -->
-            <div class="absolute bottom-0 left-0 w-64 h-64 bg-red-800 rounded-full opacity-5 blur-3xl -ml-32 -mb-32"></div>
+        <div class="relative z-10 overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-700/50">
+                <thead class="bg-black/30">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-gray-400">
+                            Preview
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-gray-400">
+                            Detail
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-black uppercase tracking-wider text-gray-400">
+                            Kategori
+                        </th>
+                        <th class="px-6 py-4 text-center text-xs font-black uppercase tracking-wider text-gray-400">
+                            Aksi
+                        </th>
+                    </tr>
+                </thead>
 
-            <div class="px-6 py-5 border-b border-gray-700/50 relative z-10">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-gradient-to-br from-red-600 to-red-800 rounded-xl flex items-center justify-center shadow-lg shadow-red-900/50">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                            </svg>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-lg font-semibold text-white">Daftar Portfolio</h3>
-                            <p class="text-sm text-gray-400">Total: {{ $portfolioItems->count() }} item</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <tbody class="divide-y divide-gray-700/40">
+                    @forelse ($portfolioItems as $item)
+                        <tr class="transition hover:bg-red-500/5">
+                            <td class="px-6 py-5">
+                                <div class="h-20 w-24 overflow-hidden rounded-2xl border border-red-500/20 bg-black shadow-lg">
+                                    <img
+                                        src="{{ asset('storage/' . $item->image) }}"
+                                        alt="{{ $item->title }}"
+                                        class="h-full w-full object-cover"
+                                    >
+                                </div>
+                            </td>
 
-            <div class="overflow-x-auto relative z-10">
-                <table class="min-w-full divide-y divide-gray-700/50">
-                    <thead class="bg-gray-900/50">
-                        <tr>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Preview</th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Judul</th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Kategori</th>
-                            <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">Aksi</th>
+                            <td class="px-6 py-5">
+                                <div class="font-bold text-white">
+                                    {{ $item->title }}
+                                </div>
+                                <div class="mt-1 max-w-xl text-sm text-gray-400 line-clamp-2">
+                                    {{ $item->description ?: 'Belum ada deskripsi.' }}
+                                </div>
+                                <div class="mt-1 text-xs text-gray-600">
+                                    ID: #{{ $item->id }}
+                                </div>
+                            </td>
+
+                            <td class="px-6 py-5">
+                                <span class="inline-flex rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-red-300">
+                                    {{ $item->category }}
+                                </span>
+                            </td>
+
+                            <td class="px-6 py-5">
+                                <div class="flex justify-center gap-3">
+                                    <a
+                                        href="{{ route('admin.portfolio.edit', $item->id) }}"
+                                        class="inline-flex items-center rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-bold text-red-300 transition hover:bg-red-500/20"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <form
+                                        action="{{ route('admin.portfolio.destroy', $item->id) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Yakin ingin menghapus portfolio ini?')"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="inline-flex items-center rounded-xl border border-red-500/30 bg-black px-4 py-2 text-sm font-bold text-red-400 transition hover:bg-red-500/10"
+                                        >
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody class="bg-gray-800/30 divide-y divide-gray-700/30">
-                        @forelse ($portfolioItems as $item)
-                            <tr class="hover:bg-gray-700/30 transition-colors duration-150">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-700 shadow-md ring-1 ring-gray-600/50">
-                                        <img
-                                            src="{{ asset('storage/' . $item->image) }}"
-                                            alt="{{ $item->title }}"
-                                            class="w-full h-full object-cover"
-                                        >
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm font-semibold text-white">{{ $item->title }}</div>
-                                    <div class="text-xs text-gray-500 mt-1">ID: #{{ $item->id }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-red-900/40 to-red-800/40 text-red-300 border border-red-700/50">
-                                        {{ $item->category }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    <div class="flex items-center justify-center space-x-3">
-                                        <a
-                                            href="{{ route('admin.portfolio.edit', $item->id) }}"
-                                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded-lg transition-all duration-200"
-                                            title="Edit"
-                                        >
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                            </svg>
-                                            Edit
-                                        </a>
-
-                                        <form
-                                            action="{{ route('admin.portfolio.destroy', $item->id) }}"
-                                            method="POST"
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus item ini?');"
-                                            class="inline"
-                                        >
-                                            @csrf
-                                            @method('DELETE')
-                                            <button
-                                                type="submit"
-                                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-900/30 rounded-lg transition-all duration-200"
-                                                title="Hapus"
-                                            >
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                </svg>
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="px-6 py-12 text-center">
-                                    <div class="flex flex-col items-center">
-                                        <div class="w-16 h-16 bg-gray-700/50 rounded-full flex items-center justify-center mb-4 ring-1 ring-gray-600/50">
-                                            <svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
-                                            </svg>
-                                        </div>
-                                        <p class="text-sm font-medium text-gray-300 mb-1">Belum ada portfolio</p>
-                                        <p class="text-sm text-gray-500">Mulai tambahkan item portfolio baru di atas</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-14 text-center">
+                                <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-red-500/20 bg-red-500/10">
+                                    <svg class="h-8 w-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                                    </svg>
+                                </div>
+                                <div class="font-bold text-white">
+                                    Belum ada portfolio
+                                </div>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    Tambahkan karya portfolio pertama kamu.
+                                </p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 @endsection

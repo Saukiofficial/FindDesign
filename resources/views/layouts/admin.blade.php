@@ -134,6 +134,17 @@
                         <span class="font-medium">About Section</span>
                     </a>
 
+                    {{-- Our Services Section --}}
+                    <a
+                        href="{{ route('admin.service-settings.edit') }}"
+                        class="group flex items-center px-4 py-3.5 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.service-settings.*') ? 'menu-active shadow-lg' : 'text-gray-300 menu-hover' }}"
+                    >
+                        <svg class="w-5 h-5 mr-3 {{ request()->routeIs('admin.service-settings.*') ? 'text-red-300' : 'text-gray-400 group-hover:text-red-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h10"/>
+                        </svg>
+                        <span class="font-medium">Our Services</span>
+                    </a>
+
                     {{-- Portfolio --}}
                     <a
                         href="{{ route('admin.portfolio.index') }}"
@@ -238,6 +249,13 @@
                         class="rounded-lg px-3 py-2 text-sm {{ request()->routeIs('admin.about-settings.*') ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300' }}"
                     >
                         About
+                    </a>
+
+                    <a
+                        href="{{ route('admin.service-settings.edit') }}"
+                        class="rounded-lg px-3 py-2 text-sm {{ request()->routeIs('admin.service-settings.*') ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300' }}"
+                    >
+                        Services
                     </a>
 
                     <a

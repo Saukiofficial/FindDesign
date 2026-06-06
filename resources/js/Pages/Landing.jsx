@@ -12,6 +12,7 @@ export default function Landing({
     featuredWorks = [],
     heroSetting = null,
     aboutSetting = null,
+    serviceSetting = null,
 }) {
     return (
         <AppLayout heroSetting={heroSetting}>
@@ -22,7 +23,7 @@ export default function Landing({
                 featuredWorks={featuredWorks}
             />
 
-            <Services />
+            <Services serviceSetting={serviceSetting} />
 
             <Portfolio portfolioItems={portfolioItems} />
 

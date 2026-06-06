@@ -9,25 +9,29 @@ use Illuminate\Support\Facades\Storage;
 
 class PortfolioController extends Controller
 {
-    /**
-     * Menampilkan daftar semua item portofolio.
-     */
     public function index()
     {
-        // PERBAIKAN: Gunakan latest()->get() untuk memastikan data selalu yang terbaru.
         $portfolioItems = PortfolioItem::latest()->get();
-        return view('admin.portfolio.index', compact('portfolioItems'));
+
+        $categories = [
+            'ILLUSTRATIONS',
+            'DIGITAL ART',
+            'ANIMATION',
+            'BRANDING',
+            'OTOMOTIF',
+            'BLUE COLLAR',
+        ];
+
+        return view('admin.portfolio.index', compact('portfolioItems', 'categories'));
     }
 
-    /**
-     * Menyimpan item portofolio baru ke database.
-     */
     public function store(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:51200', // 50 MB
+            'description' => 'nullable|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:51200',
         ]);
 
         $path = $request->file('image')->store('portfolio_images', 'public');
@@ -35,70 +39,81 @@ class PortfolioController extends Controller
         PortfolioItem::create([
             'title' => $request->title,
             'category' => $request->category,
+            'description' => $request->description,
             'image' => $path,
         ]);
 
-        return redirect()->route('admin.portfolio.index')->with('success', 'Item portofolio berhasil ditambahkan!');
+        return redirect()
+            ->route('admin.portfolio.index')
+            ->with('success', 'Item portfolio berhasil ditambahkan!');
     }
 
-    /**
-     * Menampilkan formulir untuk mengedit item portofolio.
-     */
-    public function edit(PortfolioItem $portfolioItem)
+    public function edit($id)
     {
-        return view('admin.portfolio.edit', compact('portfolioItem'));
+        $portfolioItem = PortfolioItem::findOrFail($id);
+
+        $categories = [
+            'ILLUSTRATIONS',
+            'DIGITAL ART',
+            'ANIMATION',
+            'BRANDING',
+            'OTOMOTIF',
+            'BLUE COLLAR',
+        ];
+
+        return view('admin.portfolio.edit', compact('portfolioItem', 'categories'));
     }
 
-    /**
-     * Memperbarui item portofolio di database.
-     */
-    public function update(Request $request, PortfolioItem $portfolioItem)
+    public function update(Request $request, $id)
     {
+        $portfolioItem = PortfolioItem::findOrFail($id);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:51200', // 50 MB, opsional
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:51200',
         ]);
 
-        $data = $request->only('title', 'category');
+        $data = [
+            'title' => $request->title,
+            'category' => $request->category,
+            'description' => $request->description,
+        ];
 
-        // Jika ada file gambar baru yang diunggah
         if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
             if ($portfolioItem->image) {
                 Storage::disk('public')->delete($portfolioItem->image);
             }
-            // Simpan gambar baru dan perbarui path
+
             $data['image'] = $request->file('image')->store('portfolio_images', 'public');
         }
 
         $portfolioItem->update($data);
 
-        return redirect()->route('admin.portfolio.index')->with('success', 'Item portofolio berhasil diperbarui!');
+        return redirect()
+            ->route('admin.portfolio.index')
+            ->with('success', 'Item portfolio berhasil diperbarui!');
     }
 
-    /**
-     * Menghapus item portofolio dari database.
-     */
     public function destroy($id)
     {
-        // PERBAIKAN: Cari item secara manual berdasarkan ID untuk memastikan data yang benar ditemukan.
         $portfolioItem = PortfolioItem::find($id);
 
-        // Jika item tidak ditemukan, kembali dengan pesan error.
         if (!$portfolioItem) {
-            return redirect()->route('admin.portfolio.index')->with('error', 'Item tidak ditemukan!');
+            return redirect()
+                ->route('admin.portfolio.index')
+                ->with('error', 'Item portfolio tidak ditemukan!');
         }
 
-        // Hapus file gambar dari storage jika ada
         if ($portfolioItem->image) {
             Storage::disk('public')->delete($portfolioItem->image);
         }
 
-        // Hapus record dari database
         $portfolioItem->delete();
 
-        return redirect()->route('admin.portfolio.index')->with('success', 'Item portofolio berhasil dihapus!');
+        return redirect()
+            ->route('admin.portfolio.index')
+            ->with('success', 'Item portfolio berhasil dihapus!');
     }
 }
-
