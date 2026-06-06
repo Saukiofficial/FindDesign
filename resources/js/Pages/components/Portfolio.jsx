@@ -147,15 +147,14 @@ export default function Portfolio({ portfolioItems = [] }) {
                         }
                     }
 
-                    /* ── Heading: satu baris penuh, tidak pernah wrap ── */
+                    /* ── Heading: fluid, tidak pernah terpotong ── */
                     .fd-hero-h2 {
-                        font-size: clamp(1.3rem, 7.5vw, 5.5rem);
+                        font-size: clamp(1.3rem, 5.5vw, 5rem);
                         font-weight: 900;
                         text-transform: uppercase;
                         line-height: 1.1;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
+                        white-space: normal;
+                        overflow: visible;
                         max-width: 100%;
                         letter-spacing: -0.02em;
                     }
