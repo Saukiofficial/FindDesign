@@ -71,7 +71,7 @@
             <div class="mb-6">
                 <h2 class="text-xl font-bold text-white">Gambar Hero</h2>
                 <p class="mt-1 text-sm text-gray-400">
-                    Upload gambar utama hero. Disarankan menggunakan format WebP agar ringan di HP/iPhone.
+                    Upload gambar utama hero. Karakter hero mendukung JPG, PNG, WebP, GIF, WebM, dan MP4. Untuk hasil tanpa kotak, gunakan WebM transparan atau file PNG/WebP transparan.
                 </p>
             </div>
 
@@ -85,6 +85,9 @@
                     'hero_background_image' => 'Background Hero',
                     'signature_image' => 'Signature Image / Create Impact',
                 ];
+
+                $videoFields = ['hero_character_desktop', 'hero_character_mobile'];
+                $videoExtensions = ['mp4', 'webm'];
             @endphp
 
             <div class="grid gap-6 md:grid-cols-2">
@@ -94,25 +97,52 @@
                             {{ $label }}
                         </label>
 
-                        @if ($heroSetting->{$field . '_url'})
+                        @php
+                            $currentPath = $heroSetting->{$field};
+                            $currentUrl = $heroSetting->{$field . '_url'};
+                            $currentExtension = strtolower(pathinfo($currentPath ?? '', PATHINFO_EXTENSION));
+                            $isCurrentVideo = in_array($currentExtension, $videoExtensions, true);
+                            $isCharacterField = in_array($field, $videoFields, true);
+                            $acceptTypes = $isCharacterField
+                                ? '.jpg,.jpeg,.png,.webp,.gif,.webm,.mp4'
+                                : '.jpg,.jpeg,.png,.webp,.gif,.svg';
+                        @endphp
+
+                        @if ($currentUrl)
                             <div class="mb-4 rounded-xl border border-gray-700 bg-gray-950 p-4">
-                                <img
-                                    src="{{ $heroSetting->{$field . '_url'} }}"
-                                    alt="{{ $label }}"
-                                    class="max-h-40 rounded-lg object-contain"
-                                >
+                                @if ($isCurrentVideo)
+                                    <video
+                                        src="{{ $currentUrl }}"
+                                        class="max-h-40 rounded-lg object-contain"
+                                        autoplay
+                                        muted
+                                        loop
+                                        playsinline
+                                        controls
+                                    ></video>
+                                @else
+                                    <img
+                                        src="{{ $currentUrl }}"
+                                        alt="{{ $label }}"
+                                        class="max-h-40 rounded-lg object-contain"
+                                    >
+                                @endif
                             </div>
                         @endif
 
                         <input
                             type="file"
                             name="{{ $field }}"
-                            accept=".jpg,.jpeg,.png,.webp,.svg"
+                            accept="{{ $acceptTypes }}"
                             class="block w-full text-sm text-gray-300 file:mr-4 file:rounded-xl file:border-0 file:bg-red-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-red-700"
                         >
 
                         <p class="mt-2 text-xs text-gray-500">
-                            Kosongkan jika tidak ingin mengganti gambar.
+                            @if ($isCharacterField)
+                                Kosongkan jika tidak ingin mengganti file. Karakter hero bisa pakai gambar, GIF, WebM, atau MP4. Untuk tanpa kotak, gunakan WebM transparan atau PNG/WebP transparan.
+                            @else
+                                Kosongkan jika tidak ingin mengganti gambar. GIF bisa dipakai, tetapi sebaiknya tidak terlalu besar agar tidak berat di HP.
+                            @endif
                         </p>
                     </div>
                 @endforeach

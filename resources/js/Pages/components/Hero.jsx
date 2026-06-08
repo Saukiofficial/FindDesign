@@ -128,6 +128,30 @@ export default function Hero({ heroSetting = null }) {
         window.location.href = link;
     };
 
+    const getFileExtension = (url = '') => {
+        const cleanUrl = String(url).split('?')[0].split('#')[0];
+        const parts = cleanUrl.split('.');
+
+        return parts.length > 1 ? parts.pop().toLowerCase() : '';
+    };
+
+    const isVideoFile = (url) => ['mp4', 'webm'].includes(getFileExtension(url));
+
+    const getVideoMimeType = (url) => {
+        const extension = getFileExtension(url);
+
+        if (extension === 'webm') return 'video/webm';
+        if (extension === 'mp4') return 'video/mp4';
+
+        return 'video/mp4';
+    };
+
+    const shouldUseScreenBlend = (url) => {
+        const extension = getFileExtension(url);
+
+        return ['gif', 'mp4'].includes(extension);
+    };
+
     const getStatIcon = (icon) => {
         const className = 'h-8 w-8';
 
@@ -267,6 +291,13 @@ export default function Hero({ heroSetting = null }) {
         );
     };
 
+    const desktopCharacterUrl = hero.characterDesktop;
+    const mobileCharacterUrl = hero.characterMobile || hero.characterDesktop;
+    const desktopCharacterIsVideo = isVideoFile(desktopCharacterUrl);
+    const mobileCharacterIsVideo = isVideoFile(mobileCharacterUrl);
+    const desktopCharacterNeedsBlend = shouldUseScreenBlend(desktopCharacterUrl);
+    const mobileCharacterNeedsBlend = shouldUseScreenBlend(mobileCharacterUrl);
+
     return (
         <section id="home" className="fd-hero-section relative min-h-0 overflow-hidden bg-black text-white sm:min-h-screen">
             <style>{`
@@ -315,6 +346,20 @@ export default function Hero({ heroSetting = null }) {
                     transform: translateX(-100%);
                     animation: heroLine 4s ease-in-out infinite;
                     pointer-events: none;
+                }
+
+                .fd-character-media {
+                    display: block;
+                    background: transparent;
+                }
+
+                .fd-character-media-video {
+                    pointer-events: none;
+                    background: transparent;
+                }
+
+                .fd-character-media-blend {
+                    mix-blend-mode: screen;
                 }
 
                 .fd-mobile-stage {
@@ -779,26 +824,43 @@ export default function Hero({ heroSetting = null }) {
 
                         <div className="absolute bottom-14 right-[12%] h-[300px] w-[380px] rounded-full bg-red-600/25 blur-3xl xl:h-[380px] xl:w-[460px]" />
 
-                        {hero.characterDesktop && (
-                            <picture className="fd-desktop-character relative z-10 flex w-full justify-center">
-                                {hero.characterMobile && (
-                                    <source media="(max-width: 767px)" srcSet={hero.characterMobile} />
-                                )}
-
-                                <img
-                                    src={hero.characterDesktop}
-                                    alt="Fiind Design Character"
-                                    loading="eager"
-                                    decoding="async"
-                                    fetchPriority="high"
-                                    className={`hero-character-float max-h-[500px] w-full max-w-[650px] object-contain object-bottom drop-shadow-[0_0_40px_rgba(220,38,38,0.5)] lg:max-h-[600px] lg:max-w-[760px] xl:max-h-[700px] xl:max-w-[850px] ${
-                                        isLightDevice ? 'hero-mobile-no-blur' : ''
-                                    }`}
-                                    onError={(event) => {
-                                        event.currentTarget.style.display = 'none';
-                                    }}
-                                />
-                            </picture>
+                        {desktopCharacterUrl && (
+                            desktopCharacterIsVideo ? (
+                                <div className="fd-desktop-character relative z-10 flex w-full justify-center">
+                                    <video
+                                        className={`fd-character-media fd-character-media-video hero-character-float max-h-[500px] w-full max-w-[650px] object-contain object-bottom drop-shadow-[0_0_40px_rgba(220,38,38,0.5)] lg:max-h-[600px] lg:max-w-[760px] xl:max-h-[700px] xl:max-w-[850px] ${
+                                            desktopCharacterNeedsBlend ? 'fd-character-media-blend' : ''
+                                        } ${isLightDevice ? 'hero-mobile-no-blur' : ''}`}
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        preload="metadata"
+                                        aria-label="Fiind Design Character"
+                                        onError={(event) => {
+                                            event.currentTarget.style.display = 'none';
+                                        }}
+                                    >
+                                        <source src={desktopCharacterUrl} type={getVideoMimeType(desktopCharacterUrl)} />
+                                    </video>
+                                </div>
+                            ) : (
+                                <picture className="fd-desktop-character relative z-10 flex w-full justify-center">
+                                    <img
+                                        src={desktopCharacterUrl}
+                                        alt="Fiind Design Character"
+                                        loading="eager"
+                                        decoding="async"
+                                        fetchPriority="high"
+                                        className={`fd-character-media hero-character-float max-h-[500px] w-full max-w-[650px] object-contain object-bottom drop-shadow-[0_0_40px_rgba(220,38,38,0.5)] lg:max-h-[600px] lg:max-w-[760px] xl:max-h-[700px] xl:max-w-[850px] ${
+                                            desktopCharacterNeedsBlend ? 'fd-character-media-blend' : ''
+                                        } ${isLightDevice ? 'hero-mobile-no-blur' : ''}`}
+                                        onError={(event) => {
+                                            event.currentTarget.style.display = 'none';
+                                        }}
+                                    />
+                                </picture>
+                            )
                         )}
 
                         <div className="absolute bottom-5 left-1/2 z-20 hidden w-full max-w-[760px] -translate-x-1/2 grid-cols-3 overflow-hidden rounded-2xl border border-red-500/25 bg-black/55 shadow-[0_0_45px_rgba(220,38,38,0.16)] backdrop-blur-md lg:grid">
@@ -833,27 +895,40 @@ export default function Hero({ heroSetting = null }) {
                         <div className="pointer-events-none absolute right-[-40%] top-[82px] h-[330px] w-[105%] rounded-full bg-red-700/32 blur-3xl" />
                         <div className="pointer-events-none absolute left-[-30%] top-[100px] h-[250px] w-[75%] rounded-full bg-red-950/35 blur-2xl" />
 
-                        {hero.characterDesktop && (
+                        {mobileCharacterUrl && (
                             <div className="fd-mobile-character absolute z-10">
-                                <picture className="block w-full">
-                                    {hero.characterMobile && (
-                                        <source media="(max-width: 767px)" srcSet={hero.characterMobile} />
-                                    )}
-
+                                {mobileCharacterIsVideo ? (
+                                    <video
+                                        className={`fd-character-media fd-character-media-video hero-character-float w-full object-contain object-top drop-shadow-[0_0_48px_rgba(220,38,38,0.75)] ${
+                                            mobileCharacterNeedsBlend ? 'fd-character-media-blend' : ''
+                                        } ${isLightDevice ? 'hero-mobile-no-blur' : ''}`}
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        preload="metadata"
+                                        aria-label="Fiind Design Character"
+                                        onError={(event) => {
+                                            event.currentTarget.style.display = 'none';
+                                        }}
+                                    >
+                                        <source src={mobileCharacterUrl} type={getVideoMimeType(mobileCharacterUrl)} />
+                                    </video>
+                                ) : (
                                     <img
-                                        src={hero.characterDesktop}
+                                        src={mobileCharacterUrl}
                                         alt="Fiind Design Character"
                                         loading="eager"
                                         decoding="async"
                                         fetchPriority="high"
-                                        className={`hero-character-float w-full object-contain object-top drop-shadow-[0_0_48px_rgba(220,38,38,0.75)] ${
-                                            isLightDevice ? 'hero-mobile-no-blur' : ''
-                                        }`}
+                                        className={`fd-character-media hero-character-float w-full object-contain object-top drop-shadow-[0_0_48px_rgba(220,38,38,0.75)] ${
+                                            mobileCharacterNeedsBlend ? 'fd-character-media-blend' : ''
+                                        } ${isLightDevice ? 'hero-mobile-no-blur' : ''}`}
                                         onError={(event) => {
                                             event.currentTarget.style.display = 'none';
                                         }}
                                     />
-                                </picture>
+                                )}
                             </div>
                         )}
 

@@ -89,13 +89,13 @@ class HeroSettingController extends Controller
         $heroSetting = HeroSetting::firstOrCreate(['id' => 1]);
 
         $request->validate([
-            'logo_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,svg|max:4096',
-            'brand_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,svg|max:4096',
-            'hero_title_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,svg|max:8192',
-            'hero_character_desktop' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:10240',
-            'hero_character_mobile' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:6144',
-            'hero_background_image' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:10240',
-            'signature_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,svg|max:4096',
+            'logo_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,svg|max:4096',
+            'brand_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,svg|max:4096',
+            'hero_title_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,svg|max:8192',
+            'hero_character_desktop' => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,webm,mp4|max:51200',
+            'hero_character_mobile' => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,webm,mp4|max:20480',
+            'hero_background_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,gif|max:12288',
+            'signature_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,svg|max:4096',
 
             'welcome_text' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string|max:255',
